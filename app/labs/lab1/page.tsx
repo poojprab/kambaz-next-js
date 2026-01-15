@@ -1,8 +1,9 @@
 export default function Lab1() {
   return (
     <div id="wd-lab1">
-      <h2>Lab 1</h2>
-      <h3>HTML Examples</h3>
+      <h1>Lab 1</h1>
+      <h2>HTML Examples</h2>
+      <h3>This lab focuses on the basics of HTML</h3>
 
       <div id="wd-h-tag">
         <h4>Heading Tags</h4>
@@ -207,6 +208,7 @@ export default function Lab1() {
 
           <label htmlFor="wd-text-fields-username">Username:</label>
           <input
+            type="text"
             placeholder="jdoe"
             id="wd-text-fields-username"
           />
@@ -339,7 +341,7 @@ export default function Lab1() {
 
             <h4>Anchor tag (github)</h4>
             Please 
-            <a href="https://github.com/poojprab/kanbas-next-js" id="wd-github">click here</a>
+            <a href="https://github.com/poojprab/kambaz-next-js" id="wd-github">click here</a>
             to get access to my github code repository<br/>
         </form>
       </div>

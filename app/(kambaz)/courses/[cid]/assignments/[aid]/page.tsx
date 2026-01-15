@@ -49,6 +49,18 @@ export default function AssignmentEditor() {
           </tr>
 
           <tr>
+            <td align="right" valign="top">
+              <label htmlFor="wd-display-grade-as">Submission Type</label>
+            </td>
+            <td>
+              <select id="wd-display-grade-as">
+                <option value="ONLINE">Online</option>
+                <option value="INPERSON">In Persion</option>
+              </select>
+            </td>
+          </tr>
+
+          <tr>
             <td />
             <td align="left" valign="top">
               <label>Online Entry Options</label><br />
