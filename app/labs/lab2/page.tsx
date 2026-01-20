@@ -7,6 +7,10 @@ import Margins from "./Margins";
 import Positions from "./Positions";
 import Corners from "./Corners";
 import Dimensions from "./Dimensions";
+import Zindex from "./Zindex";
+import Float from "./Float";
+import GridLayout from "./GridLayout";
+import Flex from "./Flex";
 
 export default function Lab2() {
   return (
@@ -69,11 +73,19 @@ export default function Lab2() {
 
       <Margins />
 
-      <Positions />
+      <Corners />
 
       <Dimensions /> 
 
-      <Corners />
+      <Positions />
+
+      <Zindex /> 
+
+      <Float />
+
+      <Flex />
+
+      <GridLayout />
     </div>
   );
 }
