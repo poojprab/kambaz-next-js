@@ -53,7 +53,7 @@ export default function KambazNavigation() {
       </ListGroupItem>
 
       <ListGroupItem className={linkClass("/courses")}>
-        <Link href="/courses" id="wd-course-link" className={textClass("/courses")}>
+        <Link href="/dashboard" id="wd-course-link" className={textClass("/courses")}>
           <LiaBookSolid className="fs-1" />
           <br />
           Courses
