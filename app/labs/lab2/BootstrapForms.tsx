@@ -1,3 +1,4 @@
+"use client";
 import { Row, Form, Button, Col, FormLabel, FormControl, FormSelect, FormCheck, InputGroup } from "react-bootstrap";
 export default function BootstrapForms() {
     return (

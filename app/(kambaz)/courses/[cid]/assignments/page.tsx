@@ -6,17 +6,16 @@ export default function Assignments() {
   return (
     <div id="wd-assignments" className="p-3">
 
-      {/* Search + Buttons */}
       <div className="d-flex justify-content-between align-items-center mb-4">
 
-        <div className="input-group" style={{ maxWidth: "400px" }}>
+        <div className="input-group w-50">
           <span className="input-group-text bg-white">
             <FaSearch />
           </span>
           <input
             type="text"
             className="form-control"
-            placeholder="Search for Assignments"
+            placeholder="Search..."
             id="wd-search-assignment"
           />
         </div>
@@ -33,9 +32,7 @@ export default function Assignments() {
 
       </div>
 
-      {/* Header */}
-      <div className="p-3 d-flex justify-content-between align-items-center" style={{ backgroundColor: "#f0f0f0", borderTop: "1px solid #dee2e6", borderLeft: "1px solid #dee2e6", borderRight: "1px solid #dee2e6" }}>
-
+      <div className="p-3 d-flex justify-content-between align-items-center bg-light border border-bottom-0">
         <div className="d-flex align-items-center">
           <BsGripVertical className="me-2 fs-4" />
           <strong>ASSIGNMENTS</strong>
@@ -49,7 +46,6 @@ export default function Assignments() {
 
       </div>
 
-      {/* Assignment List */}
       <ul id="wd-assignment-list" className="list-group list-group-flush">
 
         <li className="list-group-item" style={{ borderLeft: "4px solid green", borderTop: "1px solid #dee2e6", borderRight: "1px solid #dee2e6", borderBottom: "1px solid #dee2e6" }}>
@@ -64,7 +60,7 @@ export default function Assignments() {
                   href="/courses/1500/assignments/1"
                   className="fw-bold text-decoration-none text-dark"
                 >
-                  A1 - ENV + HTML
+                  A1
                 </Link>
 
                 <div className="small text-muted">
@@ -97,7 +93,7 @@ export default function Assignments() {
                   href="/courses/1500/assignments/2"
                   className="fw-bold text-decoration-none text-dark"
                 >
-                  A2 - CSS + BOOTSTRAP
+                  A2
                 </Link>
 
                 <div className="small text-muted">
@@ -130,7 +126,7 @@ export default function Assignments() {
                   href="/courses/1500/assignments/3"
                   className="fw-bold text-decoration-none text-dark"
                 >
-                  A3 - JAVASCRIPT + REACT
+                  A3
                 </Link>
 
                 <div className="small text-muted">

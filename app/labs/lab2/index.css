@@ -82,11 +82,11 @@ p#wd-id-selector-2 {
 }
 
 .wd-dimension-portrait {
-   width: 75px;
+   width: 85px;
    height: 100px;
 }
 .wd-dimension-landscape {
-   width: 100px;
+   width: 150px;
    height: 75px;
 }
 .wd-dimension-square {
@@ -138,11 +138,6 @@ p#wd-id-selector-2 {
 
 .wd-float-done {
    clear: both;
-}
-
-.wd-dimension-portrait {
-  width: 100px;
-  height: 100px;
 }
 
 .wd-grid-row {

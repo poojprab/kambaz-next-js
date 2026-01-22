@@ -9,17 +9,14 @@ import { usePathname } from "next/navigation";
 
 export default function KambazNavigation() {
   const pathname = usePathname();
-
+  
   const linkClass = (path: string) =>
-    pathname === path
-      ? "bg-white text-danger text-center border-0"
-      : "bg-black text-white text-center border-0";
-
-  const textClass = (path: string) =>
-    pathname === path
-      ? "text-danger text-decoration-none"
-      : "text-white text-decoration-none";
-
+    pathname.startsWith(path)
+      ? "bg-white text-center border-0"
+      : "bg-black text-center border-0";
+  
+  const isDashboardActive = pathname === "/dashboard" || pathname.startsWith("/courses");
+  
   return (
     <ListGroup
       id="wd-kambaz-navigation"
@@ -36,49 +33,53 @@ export default function KambazNavigation() {
         <img src="/images/NEU.png" width="75px" alt="Northeastern University" />
       </ListGroupItem>
 
-      <ListGroupItem className={linkClass("/account")}>
-        <Link href="/account" id="wd-account-link" className={textClass("/account")}>
-          <FaRegCircleUser className="fs-1" />
+      <ListGroupItem className="bg-black text-center border-0">
+        <Link href="/account" id="wd-account-link" className="text-white text-decoration-none">
+          <FaRegCircleUser className="fs-1 text-white" />
           <br />
           Account
         </Link>
       </ListGroupItem>
 
       <ListGroupItem className={linkClass("/dashboard")}>
-        <Link href="/dashboard" id="wd-dashboard-link" className={textClass("/dashboard")}>
-          <AiOutlineDashboard className="fs-1" />
+        <Link 
+          href="/dashboard" 
+          id="wd-dashboard-link" 
+          className={isDashboardActive ? "text-danger text-decoration-none" : "text-white text-decoration-none"}
+        >
+          <AiOutlineDashboard className={`fs-1 ${isDashboardActive ? "text-danger" : "text-danger"}`} />
           <br />
           Dashboard
         </Link>
       </ListGroupItem>
 
-      <ListGroupItem className={linkClass("/courses")}>
-        <Link href="/dashboard" id="wd-course-link" className={textClass("/courses")}>
-          <LiaBookSolid className="fs-1" />
+      <ListGroupItem className="bg-black text-center border-0">
+        <Link href="/dashboard" id="wd-course-link" className="text-white text-decoration-none">
+          <LiaBookSolid className="fs-1 text-danger" />
           <br />
           Courses
         </Link>
       </ListGroupItem>
 
-      <ListGroupItem className={linkClass("/calendar")}>
-        <Link href="/calendar" id="wd-calendar-link" className={textClass("/calendar")}>
-          <IoCalendarOutline className="fs-1" />
+      <ListGroupItem className="bg-black text-center border-0">
+        <Link href="/calendar" id="wd-calendar-link" className="text-white text-decoration-none">
+          <IoCalendarOutline className="fs-1 text-danger" />
           <br />
           Calendar
         </Link>
       </ListGroupItem>
 
-      <ListGroupItem className={linkClass("/inbox")}>
-        <Link href="/inbox" id="wd-inbox-link" className={textClass("/inbox")}>
-          <FaInbox className="fs-1" />
+      <ListGroupItem className="bg-black text-center border-0">
+        <Link href="/inbox" id="wd-inbox-link" className="text-white text-decoration-none">
+          <FaInbox className="fs-1 text-danger" />
           <br />
           Inbox
         </Link>
       </ListGroupItem>
 
-      <ListGroupItem className={linkClass("/labs")}>
-        <Link href="/labs" id="wd-labs-link" className={textClass("/labs")}>
-          <LiaCogSolid className="fs-1" />
+      <ListGroupItem className="bg-black text-center border-0">
+        <Link href="/labs" id="wd-labs-link" className="text-white text-decoration-none">
+          <LiaCogSolid className="fs-1 text-danger" />
           <br />
           Labs
         </Link>

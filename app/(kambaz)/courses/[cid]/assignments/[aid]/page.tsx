@@ -151,7 +151,6 @@ The Kanbas application should include a link to navigate back to the landing pag
                     type="button" 
                     className="btn-close btn-close-sm ms-2" 
                     aria-label="Close"
-                    style={{ fontSize: "0.7rem" }}
                   ></button>
                 </span>
               </div>

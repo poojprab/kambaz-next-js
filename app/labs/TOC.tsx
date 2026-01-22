@@ -26,8 +26,13 @@ export default function TOC() {
          Kambaz </NavLink>
      </NavItem>
      <NavItem>
-       <NavLink href="https://github.com/poojprab" as={Link}>
-         My Github </NavLink>
+       <NavLink 
+          href="https://github.com/poojprab" 
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          My Github
+        </NavLink>
      </NavItem>
    </Nav>
 );}

@@ -1,5 +1,6 @@
 import { Container } from "react-bootstrap";
 import "./index.css";
+import Link from "next/link";
 import ForegroundColors from "./ForegroundColors";
 import BackgroundColors from "./BackgroundColors";
 import Borders from "./Borders";
@@ -17,6 +18,8 @@ import ReactIconsSampler from "./ReactIconsSampler";
 import BoostrapGrids from "./BootstrapGrids";
 import BootstrapTables from "./BootstrapTables";
 import BootstrapLists from "./BootstrapLists";
+import BootstrapForms from "./BootstrapForms";
+import BootstrapNavigation from "./BootstrapNavigation";
 
 export default function Lab2() {
   return (
@@ -97,11 +100,18 @@ export default function Lab2() {
 
       <ReactIconsSampler />
 
+      <Link href="/labs/lab2/tailwind" id="wd-lab2tailwind-link">
+           Link to Tailwind Section </Link>
+
       <BoostrapGrids />
 
       <BootstrapTables />
 
       <BootstrapLists />
+
+      <BootstrapForms />
+
+      <BootstrapNavigation />
     </Container>
   );
 }
