@@ -47,7 +47,7 @@ The Kanbas application should include a link to navigate back to the landing pag
       <div className="row mb-3">
         <label htmlFor="wd-group" className="col-sm-3 col-form-label text-end">Assignment Group</label>
         <div className="col-sm-9">
-          <select id="wd-group" className="form-select">
+          <select id="wd-group" className="form-control">
             <option value="ASSIGNMENTS">ASSIGNMENTS</option>
             <option value="QUIZZES">QUIZZES</option>
             <option value="EXAMS">EXAMS</option>
@@ -58,7 +58,7 @@ The Kanbas application should include a link to navigate back to the landing pag
       <div className="row mb-3">
         <label htmlFor="wd-display-grade-as" className="col-sm-3 col-form-label text-end">Display Grade as</label>
         <div className="col-sm-9">
-          <select id="wd-display-grade-as" className="form-select">
+          <select id="wd-display-grade-as" className="form-control">
             <option value="PERCENTAGE">Percentage</option>
             <option value="DECIMAL">Decimal</option>
           </select>
@@ -69,7 +69,7 @@ The Kanbas application should include a link to navigate back to the landing pag
         <label htmlFor="wd-submission-type" className="col-sm-3 col-form-label text-end">Submission Type</label>
         <div className="col-sm-9">
           <div className="border rounded p-3">
-            <select id="wd-submission-type" className="form-select mb-3">
+            <select id="wd-submission-type" className="form-control mb-3">
               <option value="ONLINE">Online</option>
               <option value="INPERSON">In Person</option>
             </select>

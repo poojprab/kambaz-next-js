@@ -60,6 +60,14 @@ export default function CourseNavigation() {
         People
       </Link><br />
 
+      <Link
+        href="/courses/1500/grades"
+        id="wd-course-grades-link"
+        className="list-group-item text-danger border-0"
+      >
+        Grades
+      </Link><br />
+
     </div>
   );
 }
