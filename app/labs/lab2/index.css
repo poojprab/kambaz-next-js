@@ -66,6 +66,16 @@ p#wd-id-selector-2 {
   margin: 30px;
 }
 
+.wd-margin-centered {
+  width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.wd-margin-fat {
+  margin: 80px;
+}
+
 .wd-rounded-corners-top {
   border-top-left-radius: 40px;
   border-top-right-radius: 40px;

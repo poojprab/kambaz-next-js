@@ -14,6 +14,27 @@ export default function Margins() {
         className="wd-margin-all-around wd-padding-fat wd-border-fat
                 wd-border-yellow wd-border-solid wd-bg-color-blue wd-fg-color-white">
         Margin all around </div>
+
+    <div
+      className="wd-margin-bottom wd-border-fat
+                wd-border-red wd-border-solid wd-bg-color-yellow">
+      Margin bottom
     </div>
+
+    <div
+      className="wd-margin-centered wd-border-fat
+                wd-border-blue wd-border-solid wd-bg-color-yellow">
+      Centered with margins
+    </div>
+
+    <div
+      className="wd-margin-fat wd-border-fat
+                wd-border-yellow wd-border-solid wd-bg-color-blue wd-fg-color-white">
+      Big margin all around
+    </div>
+
+    </div>
+
+    
   );
 }
