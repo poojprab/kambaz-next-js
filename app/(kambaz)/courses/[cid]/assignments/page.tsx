@@ -1,8 +1,18 @@
+"use client";
+
 import Link from "next/link";
+import { useParams } from "next/navigation";
+import { assignments } from "../../../database";
 import { FaPlus, FaSearch, FaEllipsisV, FaCheckCircle } from "react-icons/fa";
 import { BsGripVertical, BsPencil } from "react-icons/bs";
 
 export default function Assignments() {
+  const { cid } = useParams();
+
+  const courseAssignments = assignments.filter(
+    (a) => a.course === cid
+  );
+
   return (
     <div id="wd-assignments" className="p-3">
 
@@ -43,112 +53,56 @@ export default function Assignments() {
           <FaPlus className="me-2" />
           <FaEllipsisV />
         </div>
-
       </div>
 
-      <ul id="wd-assignment-list" className="list-group list-group-flush">
+      <ul
+        id="wd-assignment-list"
+        className="list-group list-group-flush border border-top-0"
+      >
+        {courseAssignments.map((assignment) => (
+          <li
+            key={assignment._id}
+            className="list-group-item"
+            style={{
+              borderLeft: "4px solid green",
+              borderRight: "1px solid #dee2e6",
+              borderBottom: "1px solid #dee2e6",
+            }}
+          >
+            <div className="d-flex justify-content-between align-items-start">
 
-        <li className="list-group-item" style={{ borderLeft: "4px solid green", borderTop: "1px solid #dee2e6", borderRight: "1px solid #dee2e6", borderBottom: "1px solid #dee2e6" }}>
-          <div className="d-flex justify-content-between align-items-start">
+              <div className="d-flex">
+                <BsGripVertical className="me-2 fs-4 text-muted" />
+                <BsPencil className="me-2 fs-5 text-success" />
 
-            <div className="d-flex">
-              <BsGripVertical className="me-2 fs-4 text-muted" />
-              <BsPencil className="me-2 fs-5 text-success" />
+                <div>
+                  <Link
+                    href={`/courses/${cid}/assignments/${assignment._id}`}
+                    className="fw-bold text-decoration-none text-dark"
+                  >
+                    {assignment.title}
+                  </Link>
 
-              <div>
-                <Link
-                  href="/courses/1500/assignments/1"
-                  className="fw-bold text-decoration-none text-dark"
-                >
-                  A1
-                </Link>
+                  <div className="small text-muted">
+                    <span className="text-danger">Multiple Modules</span> |{" "}
+                    <b>Not available until</b> {assignment.available} |
+                  </div>
 
-                <div className="small text-muted">
-                  <span className="text-danger">Multiple Modules</span> |{" "}
-                  <b>Not available until</b> May 6 at 12:00am |
-                </div>
-                <div className="small text-muted">
-                  <b>Due</b> May 13 at 11:59pm | 100 pts
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <FaCheckCircle className="text-success me-2" />
-              <FaEllipsisV />
-            </div>
-
-          </div>
-        </li>
-
-        <li className="list-group-item" style={{ borderLeft: "4px solid green", borderRight: "1px solid #dee2e6", borderBottom: "1px solid #dee2e6" }}>
-          <div className="d-flex justify-content-between align-items-start">
-
-            <div className="d-flex">
-              <BsGripVertical className="me-2 fs-4 text-muted" />
-              <BsPencil className="me-2 fs-5 text-success" />
-
-              <div>
-                <Link
-                  href="/courses/1500/assignments/2"
-                  className="fw-bold text-decoration-none text-dark"
-                >
-                  A2
-                </Link>
-
-                <div className="small text-muted">
-                  <span className="text-danger">Multiple Modules</span> |{" "}
-                  <b>Not available until</b> May 13 at 12:00am |
-                </div>
-                <div className="small text-muted">
-                  <b>Due</b> May 20 at 11:59pm | 100 pts
+                  <div className="small text-muted">
+                    <b>Due</b> {assignment.due} | {assignment.points} pts
+                  </div>
                 </div>
               </div>
-            </div>
-
-            <div>
-              <FaCheckCircle className="text-success me-2" />
-              <FaEllipsisV />
-            </div>
-
-          </div>
-        </li>
-
-        <li className="list-group-item" style={{ borderLeft: "4px solid green", borderRight: "1px solid #dee2e6", borderBottom: "1px solid #dee2e6" }}>
-          <div className="d-flex justify-content-between align-items-start">
-
-            <div className="d-flex">
-              <BsGripVertical className="me-2 fs-4 text-muted" />
-              <BsPencil className="me-2 fs-5 text-success" />
 
               <div>
-                <Link
-                  href="/courses/1500/assignments/3"
-                  className="fw-bold text-decoration-none text-dark"
-                >
-                  A3
-                </Link>
-
-                <div className="small text-muted">
-                  <span className="text-danger">Multiple Modules</span> |{" "}
-                  <b>Not available until</b> May 20 at 12:00am |
-                </div>
-                <div className="small text-muted">
-                  <b>Due</b> May 27 at 11:59pm | 100 pts
-                </div>
+                <FaCheckCircle className="text-success me-2" />
+                <FaEllipsisV />
               </div>
+
             </div>
-
-            <div>
-              <FaCheckCircle className="text-success me-2" />
-              <FaEllipsisV />
-            </div>
-
-          </div>
-        </li>
-
+          </li>
+        ))}
       </ul>
-
     </div>
   );
 }

@@ -1,0 +1,204 @@
+[
+  {
+    "_id": "M101",
+    "name": "Introduction to Rocket Propulsion",
+    "description": "Basic principles of rocket propulsion and rocket engines.",
+    "course": "RS101",
+    "lessons": [
+      { "_id": "L101", "name": "History of Rocketry" },
+      { "_id": "L102", "name": "Rocket Propulsion Fundamentals" },
+      { "_id": "L103", "name": "Rocket Engine Types" }
+    ]
+  },
+  {
+    "_id": "M102",
+    "name": "Fuel and Combustion",
+    "description": "Rocket fuels and combustion processes.",
+    "course": "RS101",
+    "lessons": [
+      { "_id": "L104", "name": "Rocket Fuels" },
+      { "_id": "L105", "name": "Combustion Processes" },
+      { "_id": "L106", "name": "Combustion Instability" }
+    ]
+  },
+  {
+    "_id": "M103",
+    "name": "Nozzle Design",
+    "description": "Rocket nozzle design and optimization.",
+    "course": "RS101",
+    "lessons": [
+      { "_id": "L107", "name": "Nozzle Geometry" },
+      { "_id": "L108", "name": "Nozzle Performance" },
+      { "_id": "L109", "name": "Optimization Techniques" }
+    ]
+  },
+
+  {
+    "_id": "M201",
+    "name": "Fundamentals of Aerodynamics",
+    "description": "Core aerodynamic principles.",
+    "course": "RS102",
+    "lessons": [
+      { "_id": "L201", "name": "Fluid Properties" },
+      { "_id": "L202", "name": "Lift and Drag" },
+      { "_id": "L203", "name": "Boundary Layers" }
+    ]
+  },
+  {
+    "_id": "M202",
+    "name": "Subsonic and Supersonic Flow",
+    "description": "Flow regimes and shock waves.",
+    "course": "RS102",
+    "lessons": [
+      { "_id": "L204", "name": "Subsonic Flow" },
+      { "_id": "L205", "name": "Supersonic Flow" },
+      { "_id": "L206", "name": "Shock Waves" }
+    ]
+  },
+  {
+    "_id": "M203",
+    "name": "Aerodynamic Heating",
+    "description": "Thermal effects in high-speed flight.",
+    "course": "RS102",
+    "lessons": [
+      { "_id": "L207", "name": "Heat Transfer" },
+      { "_id": "L208", "name": "Thermal Protection Systems" }
+    ]
+  },
+
+  {
+    "_id": "M301",
+    "name": "Spacecraft Structural Design",
+    "description": "Designing spacecraft structures.",
+    "course": "RS103",
+    "lessons": [
+      { "_id": "L301", "name": "Structural Loads" },
+      { "_id": "L302", "name": "Materials Selection" }
+    ]
+  },
+  {
+    "_id": "M302",
+    "name": "Orbital Mechanics",
+    "description": "Orbits and mission design.",
+    "course": "RS103",
+    "lessons": [
+      { "_id": "L303", "name": "Kepler’s Laws" },
+      { "_id": "L304", "name": "Orbit Transfers" }
+    ]
+  },
+  {
+    "_id": "M303",
+    "name": "Spacecraft Systems Engineering",
+    "description": "Subsystem integration.",
+    "course": "RS103",
+    "lessons": [
+      { "_id": "L305", "name": "Power Systems" },
+      { "_id": "L306", "name": "Thermal Control" }
+    ]
+  },
+
+  {
+    "_id": "M401",
+    "name": "Foundations of Organic Chemistry",
+    "description": "Introduction to organic molecules.",
+    "course": "RS104",
+    "lessons": [
+      { "_id": "L401", "name": "Hydrocarbons" },
+      { "_id": "L402", "name": "Functional Groups" }
+    ]
+  },
+  {
+    "_id": "M402",
+    "name": "Reaction Mechanisms",
+    "description": "Organic reaction pathways.",
+    "course": "RS104",
+    "lessons": [
+      { "_id": "L403", "name": "Substitution Reactions" },
+      { "_id": "L404", "name": "Elimination Reactions" }
+    ]
+  },
+
+  {
+    "_id": "M501",
+    "name": "Inorganic Structures",
+    "description": "Structures of inorganic compounds.",
+    "course": "RS105",
+    "lessons": [
+      { "_id": "L501", "name": "Coordination Chemistry" },
+      { "_id": "L502", "name": "Crystal Field Theory" }
+    ]
+  },
+  {
+    "_id": "M502",
+    "name": "Bioinorganic Chemistry",
+    "description": "Inorganic chemistry in biology.",
+    "course": "RS105",
+    "lessons": [
+      { "_id": "L503", "name": "Metalloenzymes" },
+      { "_id": "L504", "name": "Metal Ions in Medicine" }
+    ]
+  },
+
+  {
+    "_id": "M601",
+    "name": "Thermodynamics",
+    "description": "Energy and entropy.",
+    "course": "RS106",
+    "lessons": [
+      { "_id": "L601", "name": "Laws of Thermodynamics" },
+      { "_id": "L602", "name": "Gibbs Free Energy" }
+    ]
+  },
+  {
+    "_id": "M602",
+    "name": "Quantum Chemistry",
+    "description": "Quantum behavior of molecules.",
+    "course": "RS106",
+    "lessons": [
+      { "_id": "L603", "name": "Wave Functions" },
+      { "_id": "L604", "name": "Atomic Orbitals" }
+    ]
+  },
+
+  {
+    "_id": "M701",
+    "name": "Elvish and Dwarvish Languages",
+    "description": "Languages of Middle-earth.",
+    "course": "RS107",
+    "lessons": [
+      { "_id": "L701", "name": "Quenya and Sindarin" },
+      { "_id": "L702", "name": "Khuzdul" }
+    ]
+  },
+  {
+    "_id": "M702",
+    "name": "Scripts and Inscriptions",
+    "description": "Written systems of Middle-earth.",
+    "course": "RS107",
+    "lessons": [
+      { "_id": "L703", "name": "Tengwar" },
+      { "_id": "L704", "name": "Cirth" }
+    ]
+  },
+
+  {
+    "_id": "M801",
+    "name": "Diplomatic History of Middle-earth",
+    "description": "Major alliances and conflicts.",
+    "course": "RS108",
+    "lessons": [
+      { "_id": "L801", "name": "The Council of Elrond" },
+      { "_id": "L802", "name": "The Last Alliance" }
+    ]
+  },
+  {
+    "_id": "M802",
+    "name": "Leadership and Negotiation",
+    "description": "Diplomacy across races.",
+    "course": "RS108",
+    "lessons": [
+      { "_id": "L803", "name": "Elven Diplomacy" },
+      { "_id": "L804", "name": "Human Kingdoms" }
+    ]
+  }
+]
