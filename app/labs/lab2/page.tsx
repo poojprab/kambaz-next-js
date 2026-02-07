@@ -16,10 +16,11 @@ import Flex from "./Flex";
 import MediaQueriesDemo from "./MediaQueriesDemo";
 import ReactIconsSampler from "./ReactIconsSampler";
 import BoostrapGrids from "./BootstrapGrids";
-import BootstrapTables from "./BootstrapTables";
 import BootstrapLists from "./BootstrapLists";
 import BootstrapForms from "./BootstrapForms";
+import BootstrapTables from "./BootstrapTables";
 import BootstrapNavigation from "./BootstrapNavigation";
+import ScreenSizeLabel from "./ScreenSizeLabel";
 
 export default function Lab2() {
   return (
@@ -104,6 +105,8 @@ export default function Lab2() {
            Link to Tailwind Section </Link>
 
       <BoostrapGrids />
+
+      <ScreenSizeLabel />
 
       <BootstrapTables />
 
