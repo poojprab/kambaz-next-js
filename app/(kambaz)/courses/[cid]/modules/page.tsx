@@ -1,5 +1,4 @@
 "use client";
-
 import { useParams } from "next/navigation";
 import * as db from "../../../database";
 import { ListGroup, ListGroupItem } from "react-bootstrap";
@@ -17,7 +16,6 @@ export default function Modules() {
     <div>
       <ModulesControls />
       <br /><br /><br />
-
       <ListGroup className="rounded-0" id="wd-modules">
         {modules
           .filter((module) => module.course === cid)
@@ -31,7 +29,6 @@ export default function Modules() {
                 {module.name}
                 <ModuleControlButtons />
               </div>
-
               {module.lessons && (
                 <ListGroup className="wd-lessons rounded-0">
                   {module.lessons.map((lesson) => (
