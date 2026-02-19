@@ -52,5 +52,167 @@
     "available": "May 20 at 12:00am",
     "due": "May 27 at 11:59pm",
     "points": 100
+  },
+  {
+    "_id": "A301",
+    "title": "Structural Load Analysis",
+    "course": "RS103",
+    "description": "Analyze the structural loads experienced by a spacecraft during launch and orbit.",
+    "available": "May 6 at 12:00am",
+    "due": "May 13 at 11:59pm",
+    "points": 100
+  },
+  {
+    "_id": "A302",
+    "title": "Orbital Mechanics Problem Set",
+    "course": "RS103",
+    "description": "Solve a series of problems involving Kepler's laws, orbital transfers, and mission planning.",
+    "available": "May 13 at 12:00am",
+    "due": "May 20 at 11:59pm",
+    "points": 100
+  },
+  {
+    "_id": "A303",
+    "title": "Spacecraft Systems Design Report",
+    "course": "RS103",
+    "description": "Prepare a report integrating power, thermal, and structural subsystem design for a proposed spacecraft mission.",
+    "available": "May 20 at 12:00am",
+    "due": "May 27 at 11:59pm",
+    "points": 150
+  },
+  {
+    "_id": "A401",
+    "title": "Functional Groups Identification",
+    "course": "RS104",
+    "description": "Identify and classify functional groups in a set of provided organic compounds.",
+    "available": "May 6 at 12:00am",
+    "due": "May 13 at 11:59pm",
+    "points": 75
+  },
+  {
+    "_id": "A402",
+    "title": "Reaction Mechanism Lab Report",
+    "course": "RS104",
+    "description": "Write a detailed lab report on substitution and elimination reaction mechanisms observed in lab.",
+    "available": "May 13 at 12:00am",
+    "due": "May 20 at 11:59pm",
+    "points": 100
+  },
+  {
+    "_id": "A403",
+    "title": "Organic Synthesis Design",
+    "course": "RS104",
+    "description": "Design a multi-step synthesis pathway for a given target organic molecule.",
+    "available": "May 20 at 12:00am",
+    "due": "May 27 at 11:59pm",
+    "points": 100
+  },
+  {
+    "_id": "A501",
+    "title": "Coordination Chemistry Problem Set",
+    "course": "RS105",
+    "description": "Solve problems involving coordination complexes, ligand field theory, and metal oxidation states.",
+    "available": "May 6 at 12:00am",
+    "due": "May 13 at 11:59pm",
+    "points": 100
+  },
+  {
+    "_id": "A502",
+    "title": "Crystal Field Theory Analysis",
+    "course": "RS105",
+    "description": "Analyze the crystal field splitting of d-orbitals in octahedral and tetrahedral complexes.",
+    "available": "May 13 at 12:00am",
+    "due": "May 20 at 11:59pm",
+    "points": 100
+  },
+  {
+    "_id": "A503",
+    "title": "Bioinorganic Case Study",
+    "course": "RS105",
+    "description": "Research and present a case study on the role of a metal ion in a biological system.",
+    "available": "May 20 at 12:00am",
+    "due": "May 27 at 11:59pm",
+    "points": 100
+  },
+  {
+    "_id": "A601",
+    "title": "Thermodynamics Problem Set",
+    "course": "RS106",
+    "description": "Apply the laws of thermodynamics to calculate Gibbs free energy, entropy, and enthalpy for chemical reactions.",
+    "available": "May 6 at 12:00am",
+    "due": "May 13 at 11:59pm",
+    "points": 100
+  },
+  {
+    "_id": "A602",
+    "title": "Quantum Chemistry Worksheet",
+    "course": "RS106",
+    "description": "Solve problems related to wave functions, atomic orbitals, and quantum numbers.",
+    "available": "May 13 at 12:00am",
+    "due": "May 20 at 11:59pm",
+    "points": 100
+  },
+  {
+    "_id": "A603",
+    "title": "Spectroscopy Data Analysis",
+    "course": "RS106",
+    "description": "Interpret spectroscopic data sets and identify molecular structures based on IR and NMR spectra.",
+    "available": "May 20 at 12:00am",
+    "due": "May 27 at 11:59pm",
+    "points": 100
+  },
+  {
+    "_id": "A701",
+    "title": "Elvish Translation Exercise",
+    "course": "RS107",
+    "description": "Translate a passage from English into Sindarin and Quenya, demonstrating understanding of grammar and vocabulary.",
+    "available": "May 6 at 12:00am",
+    "due": "May 13 at 11:59pm",
+    "points": 100
+  },
+  {
+    "_id": "A702",
+    "title": "Tengwar Inscription Analysis",
+    "course": "RS107",
+    "description": "Decode and analyze three Tengwar inscriptions from primary Tolkien texts and provide a written commentary.",
+    "available": "May 13 at 12:00am",
+    "due": "May 20 at 11:59pm",
+    "points": 100
+  },
+  {
+    "_id": "A703",
+    "title": "Comparative Linguistics Essay",
+    "course": "RS107",
+    "description": "Write an essay comparing the linguistic structures of at least two languages of Middle-earth.",
+    "available": "May 20 at 12:00am",
+    "due": "May 27 at 11:59pm",
+    "points": 150
+  },
+  {
+    "_id": "A801",
+    "title": "Council of Elrond Case Study",
+    "course": "RS108",
+    "description": "Analyze the diplomatic decisions made at the Council of Elrond and evaluate alternative outcomes.",
+    "available": "May 6 at 12:00am",
+    "due": "May 13 at 11:59pm",
+    "points": 100
+  },
+  {
+    "_id": "A802",
+    "title": "Inter-species Negotiation Roleplay",
+    "course": "RS108",
+    "description": "Participate in a structured roleplay simulating a diplomatic negotiation between two races of Middle-earth.",
+    "available": "May 13 at 12:00am",
+    "due": "May 20 at 11:59pm",
+    "points": 100
+  },
+  {
+    "_id": "A803",
+    "title": "War of the Ring Diplomacy Essay",
+    "course": "RS108",
+    "description": "Write a critical essay examining the successes and failures of diplomacy during the War of the Ring.",
+    "available": "May 20 at 12:00am",
+    "due": "May 27 at 11:59pm",
+    "points": 150
   }
 ]

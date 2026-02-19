@@ -43,6 +43,30 @@ export default function Lab3() {
       <BooleanVariables />
       <IfElse />
       <TernaryOperator />
+      <ConditionalOutputIfElse />
+      <ConditionalOutputInline />
+      <LegacyFunctions />
+      <ArrowFunctions />
+      <ImpliedReturn />
+      <TemplateLiterals />
+      <SimpleArrays />
+      <ArrayIndexAndLength />
+      <AddingAndRemovingToFromArrays />
+      <MapFunction />
+      <FindFunction />
+      <FindIndex />
+      <FilterFunction />
+      <JsonStringify />
+      <House />
+      <Spreading />
+      <Destructing />
+      <FunctionDestructing />
+      <DestructingImports />
+      <Classes />
+      <Styles />
+      <ClientComponentDemo />
+      <ServerComponentDemo />
+      <ForLoops />
       <Add a={3} b={4} />
       <h4>Square of 4</h4>
       <Square>4</Square>
@@ -51,32 +75,8 @@ export default function Lab3() {
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipitratione eaque illo minus cum, saepe totam
         vel nihil repellat nemo explicabo excepturi consectetur. Modi omnis minus sequi maiores, provident voluptates.
      </Highlight>
-    <TodoList />
-    <AddingAndRemovingToFromArrays />
-    <ArrayIndexAndLength />
-    <ArrowFunctions />
-    <Classes />
-    <ClientComponentDemo />
-    <ConditionalOutputIfElse />
-    <ConditionalOutputInline />
-    <Destructing />
-    <DestructingImports />
-    <FilterFunction />
-    <FindFunction />
-    <FindIndex />
-    <ForLoops />
-    <FunctionDestructing />
-    <House />
-    <ImpliedReturn />
-    <JsonStringify />
-    <LegacyFunctions />
-    <MapFunction />
-    <PathParameters />
-    <ServerComponentDemo />
-    <SimpleArrays />
-    <Spreading />
-    <Styles />
-    <TemplateLiterals />
+     <PathParameters />
+      <TodoList />
     </div>
   );
 }
