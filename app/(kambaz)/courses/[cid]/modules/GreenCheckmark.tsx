@@ -1,3 +1,4 @@
+"use client";
 import { FaCheckCircle, FaCircle } from "react-icons/fa";
 export default function GreenCheckmark() {
   return (

@@ -1,35 +1,47 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 import Link from "next/link";
+import { useDispatch } from "react-redux";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import * as db from "../../database";
+import { FormControl, Button } from "react-bootstrap";
+import { setCurrentUser } from "../reducer";
 
 export default function Signin() {
+  const [credentials, setCredentials] = useState<any>({ username: "", password: "" });
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const signin = () => {
+    const user = db.users.find(
+      (u: any) =>
+        u.username === credentials.username &&
+        u.password === credentials.password
+    );
+    if (!user) return;
+    dispatch(setCurrentUser(user));
+    router.push("/dashboard");
+  };
+
   return (
     <div id="wd-signin-screen" style={{ maxWidth: "400px" }}>
-      <h3 className="mb-3">Signin</h3>
-      <input 
-        id="wd-username"
-        type="text"
-        placeholder="username"
-        className="form-control mb-2"
-        defaultValue="alice"
+      <h3 className="mb-3">Sign In</h3>
+      <FormControl
+        value={credentials.username}
+        onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
+        className="mb-2" placeholder="username" id="wd-username"
       />
-      <input 
-        id="wd-password"
-        type="password"
-        placeholder="password"
-        className="form-control mb-2"
+      <FormControl
+        value={credentials.password}
+        onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
+        className="mb-2" placeholder="password" type="password" id="wd-password"
       />
-      <Link 
-        id="wd-signin-btn"
-        href="/dashboard"
-        className="btn btn-primary w-100 mb-2"
-      >
-        Signin
-      </Link>
-      <Link 
-        id="wd-signup-link" 
-        href="/account/signup"
-        className="text-primary"
-      >
-        Signup
+      <Button onClick={signin} id="wd-signin-btn" className="w-100 mb-2">
+        Sign In
+      </Button>
+      <Link id="wd-signup-link" href="/account/signup">
+        Sign up
       </Link>
     </div>
   );

@@ -1,14 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useParams } from "next/navigation";
 
-export default function CourseNavigation({
-  params,
-}: {
-  params: { cid: string };
-}) {
-  const { cid } = params;
+export default function CourseNavigation() {
+  const { cid } = useParams();
   const pathname = usePathname();
 
   const links = [
