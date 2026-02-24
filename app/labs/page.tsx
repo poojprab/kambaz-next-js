@@ -19,6 +19,10 @@ export default function labs() {
            Lab 3: JavaScript Fundamentals </Link>
        </li>
        <li>
+         <Link href="/labs/lab4" id="wd-lab4-link">
+           Lab 4: React </Link>
+       </li>
+       <li>
          <Link href="/" id="wd-kambaz-link">
            Kambaz </Link>
        </li>
