@@ -1,17 +1,46 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { ReactNode, useState } from "react";
 import CourseNavigation from "./Navigation";
 import { useSelector } from "react-redux";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { RootState } from "../../store";
 import { FaAlignJustify } from "react-icons/fa";
+import { useEffect } from "react";
+
+interface Course {
+  _id: string;
+  name: string;
+  number: string;
+  startDate: string;
+  endDate: string;
+  department: string;
+  credits: number;
+  description: string;
+  image?: string;
+  author?: string;
+}
 
 export default function CoursesLayout({ children }: { children: ReactNode }) {
   const { cid } = useParams();
+  const router = useRouter();
   const { courses } = useSelector((state: RootState) => state.coursesReducer);
-  const course = courses.find((course: any) => course._id === cid);
+  const { currentUser } = useSelector((state: RootState) => state.accountReducer);
+  const { enrollments } = useSelector((state: RootState) => state.enrollmentsReducer);
+  const course = courses.find((course: Course) => course._id === cid);
   const [showNav, setShowNav] = useState(true);
+
+  const isEnrolled = enrollments.some(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (e: any) => e.user === currentUser?._id && e.course === cid
+  );
+
+  useEffect(() => {
+    if (!isEnrolled) {
+      router.push("/dashboard");
+    }
+  }, [isEnrolled, router]);
+
+  if (!isEnrolled) return null;
 
   return (
     <div id="wd-courses">
