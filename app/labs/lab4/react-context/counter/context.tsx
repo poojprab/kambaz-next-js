@@ -2,7 +2,6 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
 
-// Define the context state
 interface CounterContextState {
  count: number;
  increment: () => void;
@@ -10,13 +9,11 @@ interface CounterContextState {
 }
 
 
-// Create the context
 const CounterContext = createContext<CounterContextState | undefined>(
  undefined,
 );
 
 
-// Create the provider component
 export const CounterProvider = ({ children }: { children: ReactNode }) => {
  const [count, setCount] = useState(0);
 
@@ -38,7 +35,6 @@ export const CounterProvider = ({ children }: { children: ReactNode }) => {
 };
 
 
-// Create a custom hook to use the counter context
 export const useCounter = () => {
  const context = useContext(CounterContext);
  return context;

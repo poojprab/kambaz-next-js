@@ -12,8 +12,6 @@ export default function UrlEncoding() {
  const router = useRouter();
  const baseUrl = "/labs/lab4/url-encoding";
 
-
- // Programmatic navigation (using router.push)
  const goToQueryVersion = () => {
    const params = new URLSearchParams();
    params.set("a", a);
