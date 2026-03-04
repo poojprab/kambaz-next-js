@@ -2,10 +2,11 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { Row, Col, Card, CardImg, CardBody, CardTitle, CardText, Button, FormControl } from "react-bootstrap";
+import { Row, Col, Card, CardImg, CardBody, CardTitle, CardText, FormControl } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { addNewCourse, deleteCourse, updateCourse } from "../courses/reducer";
 import { enroll, unenroll } from "../enrollments/reducer";
+import { v4 as uuidv4 } from "uuid";
 import { RootState } from "../store";
 
 export default function Dashboard() {
@@ -29,10 +30,11 @@ export default function Dashboard() {
   const displayedCourses = showAllCourses
     ? courses
     : courses.filter((c: any) => isEnrolled(c._id));
-
   return (
+    
     <div id="wd-dashboard">
       <h1 id="wd-dashboard-title">Dashboard
+        {console.log("RENDER", currentUser, courses, enrollments) as any}
         <button className="btn btn-primary float-end"
                 onClick={() => setShowAllCourses(!showAllCourses)}
                 id="wd-enrollments-btn">
@@ -44,10 +46,14 @@ export default function Dashboard() {
         <>
           <h5>New Course
             <button className="btn btn-primary float-end"
-                    onClick={() => dispatch(addNewCourse(course))}
-                    id="wd-add-new-course-click"> Add </button>
+                onClick={() => {
+                  const newId = uuidv4();
+                  dispatch(addNewCourse({ ...course, _id: newId }));
+                  dispatch(enroll({ userId: currentUser._id, courseId: newId }));
+                }}
+            id="wd-add-new-course-click"> Add </button>
             <button className="btn btn-warning float-end me-2"
-                    onClick={() => dispatch(updateCourse(course))}
+                    onClick={() =>  dispatch(updateCourse(course))}
                     id="wd-update-course-click"> Update </button>
           </h5> <br />
           <FormControl value={course.name} className="mb-2"

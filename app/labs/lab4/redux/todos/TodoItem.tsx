@@ -7,9 +7,9 @@ export default function TodoItem({ todo }: { todo: {id: string, title: string} }
   return (
     <ListGroupItem key={todo.id}>
       <Button onClick={() => dispatch(deleteTodo(todo.id))}
-              id="wd-delete-todo-click"> Delete </Button>
+              id="wd-delete-todo-click" style={{ backgroundColor: "#f44336", color: "white", border: "none", padding: "10px 20px", borderRadius: "4px", margin: "5px" }}> Delete </Button>
       <Button onClick={() => dispatch(setTodo(todo))}
-              id="wd-set-todo-click"> Edit </Button>
+              id="wd-set-todo-click" style={{ backgroundColor: "#008cff", color: "white", border: "none", padding: "10px 20px", borderRadius: "4px", margin: "5px" }}> Edit </Button>
       {todo.title}
     </ListGroupItem>
   );

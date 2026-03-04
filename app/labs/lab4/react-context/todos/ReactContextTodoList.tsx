@@ -10,8 +10,8 @@ export default function ReactContextTodoList() {
       <h2>Todo List (Context)</h2>
       <ListGroup>
         <ListGroupItem>
-          <Button onClick={addTodo} id="wd-add-todo-click"> Add </Button>
-          <Button onClick={updateTodo} id="wd-update-todo-click"> Update </Button>
+          <Button onClick={addTodo} id="wd-add-todo-click" style={{ backgroundColor: "#1e731f", color: "white", border: "none", padding: "10px 20px", borderRadius: "4px", margin: "5px" }}> Add </Button>
+          <Button onClick={updateTodo} id="wd-update-todo-click" style={{ backgroundColor: "#ffc919", color: "black", border: "none", padding: "10px 20px", borderRadius: "4px", margin: "5px" }}> Update </Button>
           <FormControl
             value={todo.title}
             onChange={(e) => setTodo({ ...todo, title: e.target.value })}
@@ -19,8 +19,8 @@ export default function ReactContextTodoList() {
         </ListGroupItem>
         {todos.map((t) => (
           <ListGroupItem key={t.id}>
-            <Button onClick={() => deleteTodo(t.id)} id="wd-delete-todo-click"> Delete </Button>
-            <Button onClick={() => setTodo(t)} id="wd-set-todo-click"> Edit </Button>
+            <Button onClick={() => deleteTodo(t.id)} id="wd-delete-todo-click" style={{ backgroundColor: "#f44336", color: "white", border: "none", padding: "10px 20px", borderRadius: "4px", margin: "5px" }}> Delete </Button>
+            <Button onClick={() => setTodo(t)} id="wd-set-todo-click" style={{ backgroundColor: "#008cff", color: "white", border: "none", padding: "10px 20px", borderRadius: "4px", margin: "5px" }}> Edit </Button>
             {t.title}
           </ListGroupItem>
         ))}

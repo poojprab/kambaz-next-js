@@ -9,9 +9,9 @@ export default function TodoForm() {
   return (
     <ListGroupItem>
       <Button onClick={() => dispatch(addTodo(todo))}
-              id="wd-add-todo-click"> Add </Button>
+              id="wd-add-todo-click" style={{ backgroundColor: "#1e731f", color: "white", border: "none", padding: "10px 20px", borderRadius: "4px", margin: "5px" }}> Add </Button>
       <Button onClick={() => dispatch(updateTodo(todo))}
-              id="wd-update-todo-click"> Update </Button>
+              id="wd-update-todo-click" className="udpate-btn"> Update </Button>
       <FormControl
         value={todo.title}
         onChange={(e) => dispatch(setTodo({ ...todo, title: e.target.value }))}/>
