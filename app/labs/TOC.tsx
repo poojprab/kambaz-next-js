@@ -5,41 +5,76 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 export default function TOC() {
   const pathname = usePathname();
- return (
-   <Nav variant="pills">
-     <NavItem>
-       <NavLink href="/labs" as={Link} className={`nav-link ${pathname.endsWith("labs") ? "active" : ""}`}>
-         Labs </NavLink>
-     </NavItem>
-     <NavItem>
-       <NavLink href="/labs/lab1" as={Link} className={`nav-link ${pathname.endsWith("lab1") ? "active" : ""}`}>
-         Lab 1 </NavLink>
-     </NavItem>
-     <NavItem>
-       <NavLink href="/labs/lab2" as={Link} className={`nav-link ${pathname.endsWith("lab2") ? "active" : ""}`}>
-         Lab 2 </NavLink>
-     </NavItem>
-     <NavItem>
-       <NavLink href="/labs/lab3" as={Link} className={`nav-link ${pathname.endsWith("lab3") ? "active" : ""}`}>
-         Lab 3 </NavLink>
-     </NavItem>
-     <NavItem>
-       <NavLink href="/labs/lab4" as={Link} className={`nav-link ${pathname.endsWith("lab4") ? "active" : ""}`}>
-         Lab 4 </NavLink>
-     </NavItem>
-     <NavItem>
-       <NavLink href="/" as={Link}>
-         Kambaz </NavLink>
-     </NavItem>
-     <NavItem>
-       <NavLink 
-          href="https://github.com/poojprab" 
+  return (
+    <Nav variant="pills">
+      <NavItem>
+        <NavLink
+          href="/labs"
+          as={Link}
+          className={`nav-link ${pathname.endsWith("labs") ? "active" : ""}`}
+        >
+          Labs{" "}
+        </NavLink>
+      </NavItem>
+      <NavItem>
+        <NavLink
+          href="/labs/lab1"
+          as={Link}
+          className={`nav-link ${pathname.endsWith("lab1") ? "active" : ""}`}
+        >
+          Lab 1{" "}
+        </NavLink>
+      </NavItem>
+      <NavItem>
+        <NavLink
+          href="/labs/lab2"
+          as={Link}
+          className={`nav-link ${pathname.endsWith("lab2") ? "active" : ""}`}
+        >
+          Lab 2{" "}
+        </NavLink>
+      </NavItem>
+      <NavItem>
+        <NavLink
+          href="/labs/lab3"
+          as={Link}
+          className={`nav-link ${pathname.endsWith("lab3") ? "active" : ""}`}
+        >
+          Lab 3{" "}
+        </NavLink>
+      </NavItem>
+      <NavItem>
+        <NavLink
+          href="/labs/lab4"
+          as={Link}
+          className={`nav-link ${pathname.endsWith("lab4") ? "active" : ""}`}
+        >
+          Lab 4{" "}
+        </NavLink>
+      </NavItem>
+      <NavItem>
+        <NavLink
+          href="/labs/lab5"
+          as={Link}
+          className={`nav-link ${pathname.endsWith("lab5") ? "active" : ""}`}
+        >
+          Lab 5{" "}
+        </NavLink>
+      </NavItem>
+      <NavItem>
+        <NavLink href="/" as={Link}>
+          Kambaz{" "}
+        </NavLink>
+      </NavItem>
+      <NavItem>
+        <NavLink
+          href="https://github.com/poojprab"
           target="_blank"
           rel="noopener noreferrer"
         >
           My Github
         </NavLink>
-     </NavItem>
-   </Nav>
-);}
-
+      </NavItem>
+    </Nav>
+  );
+}
