@@ -17,6 +17,7 @@ import { setCourses } from "../courses/reducer";
 import { enroll, unenroll } from "../enrollments/reducer";
 import { RootState } from "../store";
 import * as client from "../courses/client";
+import * as enrollmentsClient from "../enrollments/client";
 
 export default function Dashboard() {
   const { courses } = useSelector((state: RootState) => state.coursesReducer);
@@ -40,6 +41,7 @@ export default function Dashboard() {
   });
 
   useEffect(() => {
+    if (!currentUser) return;
     const fetchCourses = async () => {
       try {
         if (showAllCourses) {
@@ -71,6 +73,22 @@ export default function Dashboard() {
     dispatch(
       setCourses(courses.map((c) => (c._id === course._id ? course : c))),
     );
+  };
+
+  const onEnroll = async (courseId: string) => {
+    await enrollmentsClient.enrollUserInCourse(
+      currentUser?._id ?? "",
+      courseId,
+    );
+    dispatch(enroll({ userId: currentUser?._id ?? "", courseId }));
+  };
+
+  const onUnenroll = async (courseId: string) => {
+    await enrollmentsClient.unenrollUserFromCourse(
+      currentUser?._id ?? "",
+      courseId,
+    );
+    dispatch(unenroll({ userId: currentUser?._id ?? "", courseId }));
   };
 
   const isEnrolled = (courseId: string) =>
@@ -176,28 +194,14 @@ export default function Dashboard() {
                       {isEnrolled(c._id) ? (
                         <button
                           className="btn btn-danger btn-sm"
-                          onClick={() =>
-                            dispatch(
-                              unenroll({
-                                userId: currentUser?._id,
-                                courseId: c._id,
-                              }),
-                            )
-                          }
+                          onClick={() => onUnenroll(c._id)}
                         >
                           Unenroll
                         </button>
                       ) : (
                         <button
                           className="btn btn-success btn-sm"
-                          onClick={() =>
-                            dispatch(
-                              enroll({
-                                userId: currentUser?._id,
-                                courseId: c._id,
-                              }),
-                            )
-                          }
+                          onClick={() => onEnroll(c._id)}
                         >
                           Enroll
                         </button>

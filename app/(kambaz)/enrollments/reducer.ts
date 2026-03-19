@@ -1,30 +1,47 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice } from "@reduxjs/toolkit";
-import { enrollments } from "../database";
+
+export interface Enrollment {
+  _id: string;
+  user: string;
+  course: string;
+}
 
 const initialState = {
-  enrollments: enrollments,
+  enrollments: [] as Enrollment[],
 };
 
 const enrollmentsSlice = createSlice({
   name: "enrollments",
   initialState,
   reducers: {
-    enroll: (state, { payload: { userId, courseId } }) => {
-      const newEnrollment = {
+    setEnrollments: (state, { payload }: { payload: Enrollment[] }) => {
+      state.enrollments = payload;
+    },
+    enroll: (
+      state,
+      {
+        payload: { userId, courseId },
+      }: { payload: { userId: string; courseId: string } },
+    ) => {
+      const newEnrollment: Enrollment = {
         _id: new Date().getTime().toString(),
         user: userId,
         course: courseId,
       };
-      state.enrollments = [...state.enrollments, newEnrollment] as any;
+      state.enrollments = [...state.enrollments, newEnrollment];
     },
-    unenroll: (state, { payload: { userId, courseId } }) => {
+    unenroll: (
+      state,
+      {
+        payload: { userId, courseId },
+      }: { payload: { userId: string; courseId: string } },
+    ) => {
       state.enrollments = state.enrollments.filter(
-        (e: any) => !(e.user === userId && e.course === courseId)
+        (e) => !(e.user === userId && e.course === courseId),
       );
     },
   },
 });
 
-export const { enroll, unenroll } = enrollmentsSlice.actions;
+export const { setEnrollments, enroll, unenroll } = enrollmentsSlice.actions;
 export default enrollmentsSlice.reducer;

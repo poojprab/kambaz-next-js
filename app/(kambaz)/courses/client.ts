@@ -46,7 +46,10 @@ export const findModulesForCourse = async (courseId: string) => {
   return data;
 };
 
-export const createModule = async (courseId: string, module: object) => {
+export const createModuleForCourse = async (
+  courseId: string,
+  module: object,
+) => {
   const { data } = await axiosWithCredentials.post(
     `${COURSES_API}/${courseId}/modules`,
     module,
@@ -54,18 +57,21 @@ export const createModule = async (courseId: string, module: object) => {
   return data;
 };
 
+const MODULES_API = `${HTTP_SERVER}/api/modules`;
+
 export const deleteModule = async (moduleId: string) => {
-  const HTTP_SERVER = process.env.NEXT_PUBLIC_HTTP_SERVER;
-  await axiosWithCredentials.delete(`${HTTP_SERVER}/api/modules/${moduleId}`);
+  const { data } = await axiosWithCredentials.delete(
+    `${MODULES_API}/${moduleId}`,
+  );
+  return data;
 };
 
 export const updateModule = async (module: {
   _id: string;
   [key: string]: unknown;
 }) => {
-  const HTTP_SERVER = process.env.NEXT_PUBLIC_HTTP_SERVER;
   const { data } = await axiosWithCredentials.put(
-    `${HTTP_SERVER}/api/modules/${module._id}`,
+    `${MODULES_API}/${module._id}`,
     module,
   );
   return data;

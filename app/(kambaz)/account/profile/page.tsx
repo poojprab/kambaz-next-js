@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrentUser } from "../reducer";
 import { RootState } from "../../store";
@@ -16,10 +16,13 @@ export default function Profile() {
   );
   const [profile, setProfile] = useState<User | null>(currentUser);
 
-  if (!currentUser) {
-    router.push("/account/signin");
-    return null;
-  }
+  useEffect(() => {
+    if (!currentUser) {
+      router.push("/account/signin");
+    }
+  }, [currentUser, router]);
+
+  if (!currentUser) return null;
 
   const updateProfile = async () => {
     if (!profile) return;
