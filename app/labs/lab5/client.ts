@@ -43,3 +43,8 @@ export const updateTitle = async (title: string) => {
   const { data } = await axios.get(`${LAB5_API}/assignment/title/${title}`);
   return data;
 };
+
+export const fetchWelcomeMessage = async () => {
+  const { data } = await axios.get(`${LAB5_API}/welcome`);
+  return data;
+};
