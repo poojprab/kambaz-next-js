@@ -9,6 +9,7 @@ export interface Quiz {
   _id: string;
   title: string;
   course: string;
+  description: string;
   published: boolean;
   points: number;
   dueDate: string;

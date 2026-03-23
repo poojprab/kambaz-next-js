@@ -15,6 +15,7 @@ import { FaTrash, FaPencil } from "react-icons/fa6";
 import { BsGripVertical } from "react-icons/bs";
 import { useEffect } from "react";
 import * as client from "./client";
+import { addQuiz } from "./reducer";
 
 export default function Quizzes() {
   const { cid } = useParams();
@@ -33,7 +34,7 @@ export default function Quizzes() {
 
   useEffect(() => {
     fetchQuizzes();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cid]);
 
   const courseQuizzes = quizzes.filter((q: any) => q.course === cid);
@@ -63,6 +64,33 @@ export default function Quizzes() {
     return `Not available until ${new Date(quiz.availableFrom).toLocaleDateString()}`;
   };
 
+  const handleAddQuiz = async () => {
+    const newQuiz = await client.createQuiz(cid as string, {
+      title: "New Quiz",
+      course: cid as string,
+      description: "",
+      points: 0,
+      dueDate: "",
+      availableFrom: "",
+      availableUntil: "",
+      published: false,
+      questions: [],
+      quizType: "Graded Quiz",
+      assignmentGroup: "Quizzes",
+      shuffleAnswers: true,
+      timeLimit: 20,
+      multipleAttempts: false,
+      howManyAttempts: 1,
+      showCorrectAnswers: "",
+      accessCode: "",
+      oneQuestionAtATime: true,
+      webcamRequired: false,
+      lockQuestionsAfterAnswering: false,
+    });
+    dispatch(addQuiz(newQuiz));
+    router.push(`/courses/${cid}/quizzes/${newQuiz._id}/edit`);
+  };
+
   return (
     <div id="wd-quizzes" className="p-3">
       <div className="d-flex justify-content-between align-items-center mb-4">
@@ -81,7 +109,7 @@ export default function Quizzes() {
           <button
             className="btn btn-danger"
             id="wd-add-quiz"
-            onClick={() => router.push(`/courses/${cid}/quizzes/new`)}
+            onClick={handleAddQuiz}
           >
             <FaPlus className="me-1" /> Quiz
           </button>
