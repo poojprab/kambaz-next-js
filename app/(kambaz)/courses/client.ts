@@ -20,7 +20,10 @@ export interface Course {
 }
 
 export const createCourse = async (course: Partial<Course>) => {
-  const { data } = await axiosWithCredentials.post(COURSES_API, course);
+  const { data } = await axiosWithCredentials.post(
+    `${HTTP_SERVER}/api/users/current/courses`,
+    course,
+  );
   return data;
 };
 

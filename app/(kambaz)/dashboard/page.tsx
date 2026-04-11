@@ -14,7 +14,7 @@ import {
 } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { setCourses } from "../courses/reducer";
-import { enroll, unenroll } from "../enrollments/reducer";
+import { setEnrollments, enroll, unenroll } from "../enrollments/reducer";
 import { RootState } from "../store";
 import * as client from "../courses/client";
 import * as enrollmentsClient from "../enrollments/client";
@@ -57,6 +57,13 @@ export default function Dashboard() {
     };
     fetchCourses();
   }, [currentUser, showAllCourses, dispatch]);
+
+  useEffect(() => {
+    if (!currentUser) return;
+    enrollmentsClient
+      .fetchMyEnrollments()
+      .then((data) => dispatch(setEnrollments(data)));
+  }, [currentUser]);
 
   const onAddNewCourse = async () => {
     const newCourse = await client.createCourse(course);
