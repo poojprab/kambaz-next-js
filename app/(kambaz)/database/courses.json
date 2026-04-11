@@ -7,7 +7,39 @@
     "endDate": "2023-05-15",
     "department": "D123",
     "credits": 4,
-    "description": "This course provides an in-depth study of the fundamentals of rocket propulsion, covering topics such as propulsion theory, engine types, fuel chemistry, and the practical applications of rocket technology. Designed for students with a strong background in physics and engineering, the course includes both theoretical instruction and hands-on laboratory work"
+    "description": "This course provides an in-depth study of the fundamentals of rocket propulsion, covering topics such as propulsion theory, engine types, fuel chemistry, and the practical applications of rocket technology.",
+    "modules": [
+      {
+        "_id": "M101",
+        "name": "Introduction to Rocket Propulsion",
+        "description": "Basic principles of rocket propulsion and rocket engines.",
+        "lessons": [
+          { "_id": "L101", "name": "History of Rocketry" },
+          { "_id": "L102", "name": "Rocket Propulsion Fundamentals" },
+          { "_id": "L103", "name": "Rocket Engine Types" }
+        ]
+      },
+      {
+        "_id": "M102",
+        "name": "Fuel and Combustion",
+        "description": "Rocket fuels and combustion processes.",
+        "lessons": [
+          { "_id": "L104", "name": "Rocket Fuels" },
+          { "_id": "L105", "name": "Combustion Processes" },
+          { "_id": "L106", "name": "Combustion Instability" }
+        ]
+      },
+      {
+        "_id": "M103",
+        "name": "Nozzle Design",
+        "description": "Rocket nozzle design and optimization.",
+        "lessons": [
+          { "_id": "L107", "name": "Nozzle Geometry" },
+          { "_id": "L108", "name": "Nozzle Performance" },
+          { "_id": "L109", "name": "Optimization Techniques" }
+        ]
+      }
+    ]
   },
   {
     "_id": "RS102",
@@ -17,7 +49,38 @@
     "endDate": "2023-05-15",
     "department": "D123",
     "credits": 3,
-    "description": "This course offers a comprehensive exploration of aerodynamics, focusing on the principles and applications of airflow and its effects on flying objects. Topics include fluid dynamics, airfoil design, lift and drag forces, and the aerodynamic considerations in aircraft design. The course blends theoretical learning with practical applications, suitable for students pursuing a career in aeronautics or astronautics engineering."
+    "description": "This course offers a comprehensive exploration of aerodynamics, focusing on the principles and applications of airflow and its effects on flying objects.",
+    "modules": [
+      {
+        "_id": "M201",
+        "name": "Fundamentals of Aerodynamics",
+        "description": "Core aerodynamic principles.",
+        "lessons": [
+          { "_id": "L201", "name": "Fluid Properties" },
+          { "_id": "L202", "name": "Lift and Drag" },
+          { "_id": "L203", "name": "Boundary Layers" }
+        ]
+      },
+      {
+        "_id": "M202",
+        "name": "Subsonic and Supersonic Flow",
+        "description": "Flow regimes and shock waves.",
+        "lessons": [
+          { "_id": "L204", "name": "Subsonic Flow" },
+          { "_id": "L205", "name": "Supersonic Flow" },
+          { "_id": "L206", "name": "Shock Waves" }
+        ]
+      },
+      {
+        "_id": "M203",
+        "name": "Aerodynamic Heating",
+        "description": "Thermal effects in high-speed flight.",
+        "lessons": [
+          { "_id": "L207", "name": "Heat Transfer" },
+          { "_id": "L208", "name": "Thermal Protection Systems" }
+        ]
+      }
+    ]
   },
   {
     "_id": "RS103",
@@ -27,7 +90,36 @@
     "endDate": "2023-05-15",
     "department": "D123",
     "credits": 4,
-    "description": "This course delves into the principles and practices of spacecraft design, offering students a detailed understanding of the engineering and technology behind spacecraft systems. Key topics include spacecraft structure, propulsion, power systems, thermal control, and payload integration. Emphasizing both theoretical concepts and practical skills, the course prepares students for careers in the space industry, with a focus on innovative design and problem-solving in the context of current and future space missions"
+    "description": "This course delves into the principles and practices of spacecraft design, offering students a detailed understanding of the engineering and technology behind spacecraft systems.",
+    "modules": [
+      {
+        "_id": "M301",
+        "name": "Spacecraft Structural Design",
+        "description": "Designing spacecraft structures.",
+        "lessons": [
+          { "_id": "L301", "name": "Structural Loads" },
+          { "_id": "L302", "name": "Materials Selection" }
+        ]
+      },
+      {
+        "_id": "M302",
+        "name": "Orbital Mechanics",
+        "description": "Orbits and mission design.",
+        "lessons": [
+          { "_id": "L303", "name": "Kepler's Laws" },
+          { "_id": "L304", "name": "Orbit Transfers" }
+        ]
+      },
+      {
+        "_id": "M303",
+        "name": "Spacecraft Systems Engineering",
+        "description": "Subsystem integration.",
+        "lessons": [
+          { "_id": "L305", "name": "Power Systems" },
+          { "_id": "L306", "name": "Thermal Control" }
+        ]
+      }
+    ]
   },
   {
     "_id": "RS104",
@@ -37,7 +129,27 @@
     "endDate": "2023-05-15",
     "department": "D134",
     "credits": 3,
-    "description": "Organic Chemistry is an in-depth course that explores the structure, properties, composition, and reactions of organic compounds and materials. The course covers various topics including hydrocarbons, functional groups, stereochemistry, and organic synthesis techniques. Students will learn about the mechanisms of organic reactions, spectroscopic methods for structure determination, and the role of organic chemistry in biological systems. Emphasis is placed on problem-solving and laboratory skills, preparing students for advanced studies in chemistry, medicine, and related fields."
+    "description": "Organic Chemistry is an in-depth course that explores the structure, properties, composition, and reactions of organic compounds and materials.",
+    "modules": [
+      {
+        "_id": "M401",
+        "name": "Foundations of Organic Chemistry",
+        "description": "Introduction to organic molecules.",
+        "lessons": [
+          { "_id": "L401", "name": "Hydrocarbons" },
+          { "_id": "L402", "name": "Functional Groups" }
+        ]
+      },
+      {
+        "_id": "M402",
+        "name": "Reaction Mechanisms",
+        "description": "Organic reaction pathways.",
+        "lessons": [
+          { "_id": "L403", "name": "Substitution Reactions" },
+          { "_id": "L404", "name": "Elimination Reactions" }
+        ]
+      }
+    ]
   },
   {
     "_id": "RS105",
@@ -47,7 +159,27 @@
     "endDate": "2023-05-15",
     "department": "D134",
     "credits": 3,
-    "description": "Inorganic Chemistry focuses on the properties, structures, and behaviors of inorganic and organometallic compounds. This course covers a range of topics including coordination chemistry, metal complexes, bonding theories, symmetry, and crystal field theory. Students will also explore the role of inorganic chemistry in real-world applications such as catalysis, materials science, and bioinorganic processes. Laboratory work emphasizes synthesis and analysis of inorganic compounds, fostering a deeper understanding of theoretical concepts."
+    "description": "Inorganic Chemistry focuses on the properties, structures, and behaviors of inorganic and organometallic compounds.",
+    "modules": [
+      {
+        "_id": "M501",
+        "name": "Inorganic Structures",
+        "description": "Structures of inorganic compounds.",
+        "lessons": [
+          { "_id": "L501", "name": "Coordination Chemistry" },
+          { "_id": "L502", "name": "Crystal Field Theory" }
+        ]
+      },
+      {
+        "_id": "M502",
+        "name": "Bioinorganic Chemistry",
+        "description": "Inorganic chemistry in biology.",
+        "lessons": [
+          { "_id": "L503", "name": "Metalloenzymes" },
+          { "_id": "L504", "name": "Metal Ions in Medicine" }
+        ]
+      }
+    ]
   },
   {
     "_id": "RS106",
@@ -57,7 +189,27 @@
     "endDate": "2023-05-15",
     "department": "D134",
     "credits": 3,
-    "description": "Physical Chemistry merges the principles of physics and chemistry to understand the physical properties of molecules, the forces that act upon them, and the chemical reactions they undergo. Key topics include thermodynamics, kinetics, quantum mechanics, and spectroscopy. The course provides a comprehensive understanding of molecular behavior, reaction dynamics, and the application of mathematical methods in solving chemical problems. Labs focus on experimental techniques and data analysis, equipping students with skills necessary for research and advanced study in chemistry and related fields."
+    "description": "Physical Chemistry merges the principles of physics and chemistry to understand the physical properties of molecules, the forces that act upon them, and the chemical reactions they undergo.",
+    "modules": [
+      {
+        "_id": "M601",
+        "name": "Thermodynamics",
+        "description": "Energy and entropy.",
+        "lessons": [
+          { "_id": "L601", "name": "Laws of Thermodynamics" },
+          { "_id": "L602", "name": "Gibbs Free Energy" }
+        ]
+      },
+      {
+        "_id": "M602",
+        "name": "Quantum Chemistry",
+        "description": "Quantum behavior of molecules.",
+        "lessons": [
+          { "_id": "L603", "name": "Wave Functions" },
+          { "_id": "L604", "name": "Atomic Orbitals" }
+        ]
+      }
+    ]
   },
   {
     "_id": "RS107",
@@ -67,8 +219,27 @@
     "endDate": "2023-05-15",
     "department": "Languages",
     "credits": 3,
-    "description": "This course offers an exploration of the ancient languages and scripts found throughout Middle-earth, including Elvish (Sindarin and Quenya), Dwarvish (Khuzdul), and the Black Speech of Mordor. Students will learn the historical and cultural contexts of these languages, their linguistic structures, and their usage in various inscriptions and texts. Emphasis is on understanding the philological aspects and the role of language in shaping Middle-earth's history and lore.",
-    "author": "654f9ec2ea7ead465908d1e3"
+    "description": "This course offers an exploration of the ancient languages and scripts found throughout Middle-earth.",
+    "modules": [
+      {
+        "_id": "M701",
+        "name": "Elvish and Dwarvish Languages",
+        "description": "Languages of Middle-earth.",
+        "lessons": [
+          { "_id": "L701", "name": "Quenya and Sindarin" },
+          { "_id": "L702", "name": "Khuzdul" }
+        ]
+      },
+      {
+        "_id": "M702",
+        "name": "Scripts and Inscriptions",
+        "description": "Written systems of Middle-earth.",
+        "lessons": [
+          { "_id": "L703", "name": "Tengwar" },
+          { "_id": "L704", "name": "Cirth" }
+        ]
+      }
+    ]
   },
   {
     "_id": "RS108",
@@ -78,7 +249,26 @@
     "endDate": "2023-05-15",
     "department": "Political Studies",
     "credits": 4,
-    "description": "This course explores the complex relationships and diplomatic interactions among the different races of Middle-earth: Elves, Men, Dwarves, and Wizards. Topics include the study of historical alliances, conflicts, and the role of leadership and wisdom in maintaining peace. Students will engage in discussions and case studies on key events in Middle-earth's history, such as the Council of Elrond and the War of the Ring, to understand the principles of diplomacy and conflict resolution in a multi-species context.",
-    "author": "654f9ec2ea7ead465908d1e3"
+    "description": "This course explores the complex relationships and diplomatic interactions among the different races of Middle-earth.",
+    "modules": [
+      {
+        "_id": "M801",
+        "name": "Diplomatic History of Middle-earth",
+        "description": "Major alliances and conflicts.",
+        "lessons": [
+          { "_id": "L801", "name": "The Council of Elrond" },
+          { "_id": "L802", "name": "The Last Alliance" }
+        ]
+      },
+      {
+        "_id": "M802",
+        "name": "Leadership and Negotiation",
+        "description": "Diplomacy across races.",
+        "lessons": [
+          { "_id": "L803", "name": "Elven Diplomacy" },
+          { "_id": "L804", "name": "Human Kingdoms" }
+        ]
+      }
+    ]
   }
 ]
