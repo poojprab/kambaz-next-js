@@ -112,7 +112,7 @@ export default function Dashboard() {
           onClick={() => setShowAllCourses(!showAllCourses)}
           id="wd-enrollments-btn"
         >
-          Enrollments
+          {showAllCourses ? "My Courses" : "All Courses"}
         </button>
       </h1>
       <hr />
@@ -185,33 +185,34 @@ export default function Dashboard() {
                   </CardText>
 
                   <div className="d-flex justify-content-between align-items-center">
-                    {isEnrolled(c._id) ? (
+                    {!showAllCourses && isEnrolled(c._id) && (
                       <Link
                         href={`/courses/${c._id}/home`}
                         className="btn btn-primary"
                       >
-                        {" "}
-                        Go{" "}
+                        Go
                       </Link>
-                    ) : (
-                      <span />
                     )}
-
+                    {showAllCourses && <span />}
                     <div>
-                      {isEnrolled(c._id) ? (
-                        <button
-                          className="btn btn-danger btn-sm"
-                          onClick={() => onUnenroll(c._id)}
-                        >
-                          Unenroll
-                        </button>
-                      ) : (
-                        <button
-                          className="btn btn-success btn-sm"
-                          onClick={() => onEnroll(c._id)}
-                        >
-                          Enroll
-                        </button>
+                      {showAllCourses && (
+                        <>
+                          {isEnrolled(c._id) ? (
+                            <button
+                              className="btn btn-danger btn-sm"
+                              onClick={() => onUnenroll(c._id)}
+                            >
+                              Unenroll
+                            </button>
+                          ) : (
+                            <button
+                              className="btn btn-success btn-sm"
+                              onClick={() => onEnroll(c._id)}
+                            >
+                              Enroll
+                            </button>
+                          )}
+                        </>
                       )}
 
                       {currentUser?.role === "FACULTY" && (
@@ -224,8 +225,7 @@ export default function Dashboard() {
                             className="btn btn-danger btn-sm ms-1"
                             id="wd-delete-course-click"
                           >
-                            {" "}
-                            Delete{" "}
+                            Delete
                           </button>
                           <button
                             onClick={(event) => {
@@ -235,8 +235,7 @@ export default function Dashboard() {
                             className="btn btn-warning btn-sm ms-1"
                             id="wd-edit-course-click"
                           >
-                            {" "}
-                            Edit{" "}
+                            Edit
                           </button>
                         </>
                       )}
