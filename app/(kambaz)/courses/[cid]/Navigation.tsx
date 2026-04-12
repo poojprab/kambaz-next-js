@@ -24,7 +24,7 @@ export default function CourseNavigation() {
         const route = link.toLowerCase();
         const href =
           link === "People"
-            ? `/courses/${cid}/people/table`
+            ? `/courses/${cid}/people`
             : `/courses/${cid}/${route}`;
 
         const isActive = pathname === href;

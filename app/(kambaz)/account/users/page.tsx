@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import PeopleTable from "../../courses/[cid]/people/table/page";
+import PeopleTable from "../../courses/[cid]/people/page";
 import * as client from "../client";
 import { FormControl } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa";

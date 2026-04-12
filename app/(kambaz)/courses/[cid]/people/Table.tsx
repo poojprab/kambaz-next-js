@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Table } from "react-bootstrap";
 import { FaUserCircle } from "react-icons/fa";
-import PeopleDetails from "../Details";
+import PeopleDetails from "./Details";
 
 interface User {
   _id: string;
