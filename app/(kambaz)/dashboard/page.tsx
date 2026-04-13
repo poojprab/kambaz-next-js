@@ -63,6 +63,7 @@ export default function Dashboard() {
     enrollmentsClient
       .fetchMyEnrollments()
       .then((data) => dispatch(setEnrollments(data)));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
 
   const onAddNewCourse = async () => {

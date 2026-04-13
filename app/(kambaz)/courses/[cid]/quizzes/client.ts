@@ -65,3 +65,27 @@ export const findQuizById = async (quizId: string): Promise<Quiz> => {
   const { data } = await axiosWithCredentials.get(`${QUIZZES_API}/${quizId}`);
   return data;
 };
+
+export const saveQuizAttempt = async (
+  quizId: string,
+  answers: Record<string, string>,
+  score: number,
+): Promise<void> => {
+  await axiosWithCredentials.post(`${QUIZZES_API}/${quizId}/attempts`, {
+    quiz: quizId,
+    answers,
+    score,
+  });
+};
+
+export const findQuizAttempt = async (
+  quizId: string,
+): Promise<{
+  answers: Record<string, string>;
+  score: number;
+} | null> => {
+  const { data } = await axiosWithCredentials.get(
+    `${QUIZZES_API}/${quizId}/attempts`,
+  );
+  return data;
+};

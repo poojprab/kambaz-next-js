@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useParams, useRouter } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteQuiz, togglePublish, setQuizzes } from "./reducer";
+import { deleteQuiz, togglePublish, setQuizzes, addQuiz } from "./reducer";
 import { RootState } from "../../../store";
 import {
   FaPlus,
@@ -13,9 +12,9 @@ import {
 } from "react-icons/fa";
 import { FaTrash, FaPencil } from "react-icons/fa6";
 import { BsGripVertical } from "react-icons/bs";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import * as client from "./client";
-import { addQuiz } from "./reducer";
+import { Quiz } from "./client";
 
 export default function Quizzes() {
   const { cid } = useParams();
@@ -26,42 +25,64 @@ export default function Quizzes() {
     (state: RootState) => state.accountReducer,
   );
   const isFaculty = currentUser?.role === "FACULTY";
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
-  const fetchQuizzes = async () => {
-    const quizzes = await client.findQuizzesForCourse(cid as string);
-    dispatch(setQuizzes(quizzes));
-  };
+  const [attempts, setAttempts] = useState<Record<string, number>>({});
 
   useEffect(() => {
-    fetchQuizzes();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    client
+      .findQuizzesForCourse(cid as string)
+      .then((data) => dispatch(setQuizzes(data)));
   }, [cid]);
 
-  const courseQuizzes = quizzes.filter((q: any) => q.course === cid);
-  const visibleQuizzes = isFaculty
-    ? courseQuizzes
-    : courseQuizzes.filter((q: any) => q.published);
+  const courseQuizzes = quizzes
+    .filter((q: Quiz) => q.course === cid)
+    .filter((q: Quiz) => isFaculty || q.published)
+    .sort(
+      (a: Quiz, b: Quiz) =>
+        new Date(a.availableFrom).getTime() -
+        new Date(b.availableFrom).getTime(),
+    );
+
+  useEffect(() => {
+    if (!isFaculty) {
+      courseQuizzes.forEach((quiz: Quiz) => {
+        client
+          .findQuizAttempt(quiz._id)
+          .then((attempt) => {
+            if (attempt) {
+              setAttempts((prev) => ({ ...prev, [quiz._id]: attempt.score }));
+            }
+          })
+          .catch(() => {});
+      });
+    }
+  }, [courseQuizzes, isFaculty]);
 
   const handleDelete = async (quizId: string) => {
     if (window.confirm("Are you sure you want to delete this quiz?")) {
       await client.deleteQuiz(quizId);
       dispatch(deleteQuiz(quizId));
     }
+    setOpenMenuId(null);
   };
 
-  const handleTogglePublish = async (quiz: any) => {
-    const updated = { ...quiz, published: !quiz.published };
-    await client.updateQuiz(updated);
+  const handleTogglePublish = async (quiz: Quiz) => {
+    const updated = await client.updateQuiz({
+      ...quiz,
+      published: !quiz.published,
+    });
     dispatch(togglePublish(quiz._id));
+    return updated;
   };
 
-  const getAvailabilityStatus = (quiz: any) => {
+  const getAvailabilityStatus = (quiz: Quiz) => {
     const now = new Date();
     const from = new Date(quiz.availableFrom);
     const until = new Date(quiz.availableUntil);
     if (now > until) return "Closed";
     if (now >= from) return "Available";
-    return `Not available until ${new Date(quiz.availableFrom).toLocaleDateString()}`;
+    return `Not available until ${from.toLocaleDateString()}`;
   };
 
   const handleAddQuiz = async () => {
@@ -88,7 +109,7 @@ export default function Quizzes() {
       lockQuestionsAfterAnswering: false,
     });
     dispatch(addQuiz(newQuiz));
-    router.push(`/courses/${cid}/quizzes/${newQuiz._id}/edit`);
+    router.push(`/courses/${cid}/quizzes/${newQuiz._id}/faculty/edit`);
   };
 
   return (
@@ -124,82 +145,155 @@ export default function Quizzes() {
         <FaEllipsisV />
       </div>
 
-      <ul
-        id="wd-quiz-list"
-        className="list-group list-group-flush border border-top-0"
-      >
-        {visibleQuizzes.map((quiz: any) => (
-          <li
-            key={quiz._id}
-            className="list-group-item"
-            style={{ borderLeft: "4px solid green" }}
-          >
-            <div className="d-flex justify-content-between align-items-center">
-              <div className="d-flex align-items-center">
-                <BsGripVertical className="me-2 fs-4 text-muted" />
-                <div>
-                  <div
-                    className="fw-bold"
-                    style={{ cursor: "pointer" }}
-                    onClick={() =>
-                      router.push(`/courses/${cid}/quizzes/${quiz._id}`)
-                    }
-                  >
-                    {quiz.title}
-                  </div>
-                  <div className="small text-muted">
-                    <span
-                      className={
-                        getAvailabilityStatus(quiz) === "Available"
-                          ? "text-success"
-                          : getAvailabilityStatus(quiz) === "Closed"
-                            ? "text-danger"
-                            : ""
-                      }
-                    >
-                      {getAvailabilityStatus(quiz)}
-                    </span>
-                    {" | "}
-                    <b>Due</b> {new Date(quiz.dueDate).toLocaleDateString()} |{" "}
-                    {quiz.points} pts | {quiz.questions?.length || 0} Questions
-                  </div>
-                </div>
-              </div>
-
-              <div className="d-flex align-items-center">
-                {isFaculty && (
-                  <>
-                    <span
-                      onClick={() => handleTogglePublish(quiz)}
-                      style={{ cursor: "pointer" }}
-                      className="me-2"
-                    >
-                      {quiz.published ? (
-                        <FaCheckCircle className="text-success" />
-                      ) : (
-                        <FaBan className="text-secondary" />
-                      )}
-                    </span>
-                    <FaPencil
-                      className="text-primary me-2"
+      {courseQuizzes.length === 0 ? (
+        <div className="border p-4 text-center text-muted">
+          {isFaculty ? (
+            <>
+              No quizzes yet. Click <strong>+ Quiz</strong> to add one.
+            </>
+          ) : (
+            "No quizzes available yet."
+          )}
+        </div>
+      ) : (
+        <ul
+          id="wd-quiz-list"
+          className="list-group list-group-flush border border-top-0"
+        >
+          {courseQuizzes.map((quiz: Quiz) => (
+            <li
+              key={quiz._id}
+              className="list-group-item"
+              style={{ borderLeft: "4px solid green" }}
+            >
+              <div className="d-flex justify-content-between align-items-center">
+                <div className="d-flex align-items-center">
+                  <BsGripVertical className="me-2 fs-4 text-muted" />
+                  <div>
+                    <div
+                      className="fw-bold"
                       style={{ cursor: "pointer" }}
                       onClick={() =>
-                        router.push(`/courses/${cid}/quizzes/${quiz._id}/edit`)
+                        router.push(
+                          isFaculty
+                            ? `/courses/${cid}/quizzes/${quiz._id}/faculty`
+                            : `/courses/${cid}/quizzes/${quiz._id}/student`,
+                        )
                       }
-                    />
-                    <FaTrash
-                      className="text-danger me-2"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => handleDelete(quiz._id)}
-                    />
-                  </>
-                )}
-                <FaEllipsisV />
+                    >
+                      {quiz.title}
+                    </div>
+                    <div className="small text-muted">
+                      <span
+                        className={
+                          getAvailabilityStatus(quiz) === "Available"
+                            ? "text-success"
+                            : getAvailabilityStatus(quiz) === "Closed"
+                              ? "text-danger"
+                              : ""
+                        }
+                      >
+                        {getAvailabilityStatus(quiz)}
+                      </span>
+                      {" | "}
+                      <b>Due</b>{" "}
+                      {quiz.dueDate
+                        ? new Date(quiz.dueDate).toLocaleDateString()
+                        : "N/A"}{" "}
+                      | {quiz.points} pts | {quiz.questions?.length || 0}{" "}
+                      Questions
+                      {!isFaculty && attempts[quiz._id] !== undefined && (
+                        <span
+                          className={`ms-2 ${attempts[quiz._id] / quiz.points >= 0.7 ? "text-success" : "text-danger"}`}
+                        >
+                          | Score: {attempts[quiz._id]} / {quiz.points}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="d-flex align-items-center gap-2 position-relative">
+                  {isFaculty && (
+                    <>
+                      <span
+                        onClick={() => handleTogglePublish(quiz)}
+                        style={{ cursor: "pointer" }}
+                      >
+                        {quiz.published ? (
+                          <FaCheckCircle className="text-success" />
+                        ) : (
+                          <FaBan className="text-secondary" />
+                        )}
+                      </span>
+
+                      <FaEllipsisV
+                        style={{ cursor: "pointer" }}
+                        onClick={() =>
+                          setOpenMenuId(
+                            openMenuId === quiz._id ? null : quiz._id,
+                          )
+                        }
+                      />
+
+                      {openMenuId === quiz._id && (
+                        <div
+                          className="position-absolute bg-white border shadow rounded p-2"
+                          style={{
+                            right: 0,
+                            top: "100%",
+                            zIndex: 100,
+                            minWidth: "150px",
+                          }}
+                        >
+                          <div
+                            className="p-2"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => {
+                              router.push(
+                                `/courses/${cid}/quizzes/${quiz._id}/faculty/edit`,
+                              );
+                              setOpenMenuId(null);
+                            }}
+                          >
+                            <FaPencil className="me-2" /> Edit
+                          </div>
+                          <div
+                            className="p-2"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => handleDelete(quiz._id)}
+                          >
+                            <FaTrash className="me-2 text-danger" /> Delete
+                          </div>
+                          <div
+                            className="p-2"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => {
+                              handleTogglePublish(quiz);
+                              setOpenMenuId(null);
+                            }}
+                          >
+                            {quiz.published ? (
+                              <>
+                                <FaBan className="me-2" /> Unpublish
+                              </>
+                            ) : (
+                              <>
+                                <FaCheckCircle className="me-2 text-success" />{" "}
+                                Publish
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
               </div>
-            </div>
-          </li>
-        ))}
-      </ul>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
