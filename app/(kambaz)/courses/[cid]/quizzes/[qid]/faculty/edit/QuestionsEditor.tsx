@@ -397,4 +397,3 @@ export default function QuizQuestionsEditor({
     </div>
   );
 }
-git 
