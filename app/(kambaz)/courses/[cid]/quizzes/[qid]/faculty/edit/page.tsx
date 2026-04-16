@@ -25,7 +25,7 @@ export default function QuizEditor() {
     if (!quiz) return;
     const updated = await client.updateQuiz(quiz);
     dispatch(updateQuiz(updated));
-    router.push(`/courses/${cid}/quizzes/${qid}`);
+    router.push(`/courses/${cid}/quizzes/${qid}/faculty`);
   };
 
   const handleSaveAndPublish = async () => {
