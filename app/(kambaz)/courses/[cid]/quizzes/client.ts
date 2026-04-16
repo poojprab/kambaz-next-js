@@ -5,6 +5,29 @@ const HTTP_SERVER = process.env.NEXT_PUBLIC_HTTP_SERVER;
 const COURSES_API = `${HTTP_SERVER}/api/courses`;
 const QUIZZES_API = `${HTTP_SERVER}/api/quizzes`;
 
+export interface Choice {
+  _id: string;
+  text: string;
+  isCorrect: boolean;
+}
+
+export interface Blank {
+  _id: string;
+  correctAnswers: string[];
+}
+
+export interface Question {
+  _id: string;
+  title: string;
+  type: "multiple_choice" | "true_false" | "fill_in_blank";
+  points: number;
+  question: string;
+  choices: Choice[];
+  correctAnswer: string;
+  possibleAnswers: string[];
+  blanks: Blank[];
+}
+
 export interface Quiz {
   _id: string;
   title: string;
@@ -15,7 +38,7 @@ export interface Quiz {
   dueDate: string;
   availableFrom: string;
   availableUntil: string;
-  questions: object[];
+  questions: Question[];
   quizType: string;
   assignmentGroup: string;
   shuffleAnswers: boolean;
