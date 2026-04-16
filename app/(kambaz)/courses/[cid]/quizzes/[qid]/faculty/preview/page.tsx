@@ -43,7 +43,28 @@ export default function QuizPreview() {
 
   if (!quiz) return <div>Loading...</div>;
 
-  const questions = quiz.questions;
+  if (!quiz.questions || quiz.questions.length === 0) {
+    return (
+      <div id="wd-quiz-preview" className="p-4">
+        <div className="alert alert-warning">
+          This is a preview of the published version of the quiz.
+        </div>
+        <h2>{quiz.title}</h2>
+        <hr />
+        <div className="alert alert-info">This quiz has no questions yet.</div>
+        <button
+          className="btn btn-secondary mt-3"
+          onClick={() =>
+            router.push(`/courses/${cid}/quizzes/${qid}/faculty/edit`)
+          }
+        >
+          Add Questions
+        </button>
+      </div>
+    );
+  }
+
+  const questions = quiz.questions ?? [];
   const currentQuestion = questions[currentIndex];
 
   const handleAnswer = (questionId: string, answer: string) => {
