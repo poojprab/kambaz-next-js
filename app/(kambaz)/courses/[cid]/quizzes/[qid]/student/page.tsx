@@ -10,6 +10,11 @@ interface Choice {
   isCorrect: boolean;
 }
 
+interface Blank {
+  _id: string;
+  correctAnswers: string[];
+}
+
 interface Question {
   _id: string;
   title: string;
@@ -19,10 +24,13 @@ interface Question {
   choices: Choice[];
   correctAnswer: string;
   possibleAnswers: string[];
+  blanks: Blank[];
 }
 
+type AllAnswers = Record<string, string | Record<string, string>>;
+
 interface Attempt {
-  answers: Record<string, string>;
+  answers: AllAnswers;
   score: number;
 }
 
@@ -30,7 +38,7 @@ export default function TakeQuiz() {
   const { qid } = useParams();
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [attempt, setAttempt] = useState<Attempt | null>(null);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [answers, setAnswers] = useState<AllAnswers>({});
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -42,7 +50,20 @@ export default function TakeQuiz() {
       .then((data) => {
         if (data) {
           setAttempt(data);
-          setAnswers(data.answers);
+          const restored: AllAnswers = {};
+          Object.entries(data.answers).forEach(([qId, answer]) => {
+            try {
+              const parsed = JSON.parse(answer);
+              if (typeof parsed === "object") {
+                restored[qId] = parsed;
+              } else {
+                restored[qId] = answer;
+              }
+            } catch {
+              restored[qId] = answer;
+            }
+          });
+          setAnswers(restored);
           setScore(data.score);
           setSubmitted(true);
         }
@@ -52,126 +73,178 @@ export default function TakeQuiz() {
 
   if (!quiz) return <div>Loading...</div>;
 
-  const questions = quiz.questions as Question[];
+  const questions = (quiz.questions ?? []) as Question[];
   const currentQuestion = questions[currentIndex];
 
-  const handleAnswer = (questionId: string, answer: string) => {
+  const handleSimpleAnswer = (questionId: string, answer: string) => {
     if (submitted) return;
     setAnswers({ ...answers, [questionId]: answer });
   };
 
-  const isCorrect = (q: Question): boolean => {
-    const answer = answers[q._id];
-    if (q.type === "multiple_choice") {
-      const correct = q.choices.find((c) => c.isCorrect);
-      return correct ? answer === correct._id : false;
-    } else if (q.type === "true_false") {
-      return answer === q.correctAnswer;
-    } else {
-      return q.possibleAnswers
-        .map((a) => a.toLowerCase())
-        .includes(answer?.toLowerCase());
-    }
+  const handleBlankAnswer = (
+    questionId: string,
+    blankId: string,
+    value: string,
+  ) => {
+    if (submitted) return;
+    const existing = (answers[questionId] as Record<string, string>) ?? {};
+    setAnswers({ ...answers, [questionId]: { ...existing, [blankId]: value } });
   };
 
-  const calculateScore = () => {
-    let total = 0;
-    questions.forEach((q) => {
-      const answer = answers[q._id];
-      if (q.type === "multiple_choice") {
-        const correct = q.choices.find((c) => c.isCorrect);
-        if (correct && answer === correct._id) total += q.points;
-      } else if (q.type === "true_false") {
-        if (answer === q.correctAnswer) total += q.points;
-      } else if (q.type === "fill_in_blank") {
-        if (
-          q.possibleAnswers
-            .map((a) => a.toLowerCase())
-            .includes(answer?.toLowerCase())
-        ) {
-          total += q.points;
-        }
+  const isCorrect = (q: Question): boolean => {
+    if (q.type === "multiple_choice") {
+      const correct = q.choices.find((c) => c.isCorrect);
+      return correct ? answers[q._id] === correct._id : false;
+    }
+    if (q.type === "true_false") {
+      return answers[q._id] === q.correctAnswer;
+    }
+    if (q.type === "fill_in_blank") {
+      const blanks = q.blanks ?? [];
+      if (blanks.length === 0) {
+        return q.possibleAnswers
+          .map((a) => a.toLowerCase())
+          .includes((answers[q._id] as string)?.toLowerCase());
       }
-    });
-    return total;
+      const blankAnswers = (answers[q._id] as Record<string, string>) ?? {};
+      return blanks.every((blank) => {
+        const given = blankAnswers[blank._id]?.toLowerCase().trim() ?? "";
+        return blank.correctAnswers
+          .map((a) => a.toLowerCase().trim())
+          .includes(given);
+      });
+    }
+    return false;
   };
+
+  const calculateScore = () =>
+    questions.reduce(
+      (total, q) => (isCorrect(q) ? total + q.points : total),
+      0,
+    );
 
   const handleSubmit = async () => {
     const finalScore = calculateScore();
     setScore(finalScore);
     setSubmitted(true);
-    await client.saveQuizAttempt(qid as string, answers, finalScore);
+
+    const flatAnswers: Record<string, string> = {};
+    Object.entries(answers).forEach(([qId, answer]) => {
+      if (typeof answer === "string") {
+        flatAnswers[qId] = answer;
+      } else {
+        flatAnswers[qId] = JSON.stringify(answer);
+      }
+    });
+
+    await client.saveQuizAttempt(qid as string, flatAnswers, finalScore);
   };
 
-  const renderQuestion = (q: Question) => (
-    <div key={q._id} className="border p-4 mb-3">
-      <div className="d-flex justify-content-between mb-2">
-        <strong>{q.title}</strong>
-        <span>{q.points} pts</span>
-      </div>
-      <p>{q.question}</p>
-      {submitted && (
-        <div
-          className={`alert ${isCorrect(q) ? "alert-success" : "alert-danger"} py-1`}
-        >
-          {isCorrect(q) ? "✓ Correct" : "✗ Incorrect"}
+  const renderQuestion = (q: Question) => {
+    const blanks = q.blanks ?? [];
+    const blankAnswers = (answers[q._id] as Record<string, string>) ?? {};
+
+    return (
+      <div key={q._id} className="border p-4 mb-3">
+        <div className="d-flex justify-content-between mb-2">
+          <strong>{q.title}</strong>
+          <span>{q.points} pts</span>
         </div>
-      )}
-      {q.type === "multiple_choice" &&
-        q.choices.map((choice) => (
+        <p>{q.question}</p>
+
+        {submitted && (
           <div
-            key={choice._id}
-            className="d-flex align-items-center gap-2 mb-2"
+            className={`alert ${isCorrect(q) ? "alert-success" : "alert-danger"} py-1`}
           >
-            <input
-              type="radio"
-              name={q._id}
-              value={choice._id}
-              checked={answers[q._id] === choice._id}
-              onChange={() => handleAnswer(q._id, choice._id)}
-              disabled={submitted}
-            />
-            <label>{choice.text}</label>
-            {submitted && choice.isCorrect && (
-              <span className="text-success ms-2">(Correct)</span>
-            )}
+            {isCorrect(q) ? "✓ Correct" : "✗ Incorrect"}
           </div>
-        ))}
-      {q.type === "true_false" &&
-        ["true", "false"].map((val) => (
-          <div key={val} className="d-flex align-items-center gap-2 mb-2">
-            <input
-              type="radio"
-              name={q._id}
-              value={val}
-              checked={answers[q._id] === val}
-              onChange={() => handleAnswer(q._id, val)}
-              disabled={submitted}
-            />
-            <label>{val.charAt(0).toUpperCase() + val.slice(1)}</label>
-            {submitted && q.correctAnswer === val && (
-              <span className="text-success ms-2">(Correct)</span>
-            )}
-          </div>
-        ))}
-      {q.type === "fill_in_blank" && (
-        <div>
-          <input
-            className="form-control"
-            placeholder="Your answer"
-            value={answers[q._id] || ""}
-            onChange={(e) => handleAnswer(q._id, e.target.value)}
-            disabled={submitted}
-          />
-          {submitted && (
-            <div className="text-success mt-1">
-              Correct: {q.possibleAnswers.join(", ")}
+        )}
+
+        {q.type === "multiple_choice" &&
+          q.choices.map((choice) => (
+            <div
+              key={choice._id}
+              className="d-flex align-items-center gap-2 mb-2"
+            >
+              <input
+                type="radio"
+                name={q._id}
+                value={choice._id}
+                checked={answers[q._id] === choice._id}
+                onChange={() => handleSimpleAnswer(q._id, choice._id)}
+                disabled={submitted}
+              />
+              <label>{choice.text}</label>
+              {submitted && choice.isCorrect && (
+                <span className="text-success ms-2">(Correct)</span>
+              )}
             </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
+          ))}
+
+        {q.type === "true_false" &&
+          ["true", "false"].map((val) => (
+            <div key={val} className="d-flex align-items-center gap-2 mb-2">
+              <input
+                type="radio"
+                name={q._id}
+                value={val}
+                checked={answers[q._id] === val}
+                onChange={() => handleSimpleAnswer(q._id, val)}
+                disabled={submitted}
+              />
+              <label>{val.charAt(0).toUpperCase() + val.slice(1)}</label>
+              {submitted && q.correctAnswer === val && (
+                <span className="text-success ms-2">(Correct)</span>
+              )}
+            </div>
+          ))}
+
+        {q.type === "fill_in_blank" && (
+          <div>
+            {blanks.length > 0 ? (
+              blanks.map((blank, i) => (
+                <div key={blank._id} className="mb-3">
+                  <label className="form-label small fw-semibold">
+                    Blank {i + 1}
+                  </label>
+                  <input
+                    className="form-control"
+                    placeholder={`Answer for blank ${i + 1}`}
+                    value={blankAnswers[blank._id] ?? ""}
+                    onChange={(e) =>
+                      handleBlankAnswer(q._id, blank._id, e.target.value)
+                    }
+                    disabled={submitted}
+                  />
+                  {submitted && (
+                    <div className="text-success mt-1 small">
+                      Accepted: {blank.correctAnswers.join(", ")}
+                    </div>
+                  )}
+                </div>
+              ))
+            ) : (
+              <div>
+                <input
+                  className="form-control"
+                  placeholder="Your answer"
+                  value={(answers[q._id] as string) || ""}
+                  onChange={(e) => handleSimpleAnswer(q._id, e.target.value)}
+                  disabled={submitted}
+                />
+                {submitted && (
+                  <div className="text-success mt-1 small">
+                    Accepted: {q.possibleAnswers.join(", ")}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
+
   const now = new Date();
   const availableFrom = new Date(quiz.availableFrom);
   const availableUntil = new Date(quiz.availableUntil);
@@ -190,8 +263,7 @@ export default function TakeQuiz() {
       </div>
     );
 
-  if (!quiz) return <div>Loading...</div>;
-  if (quiz.questions.length === 0)
+  if (questions.length === 0)
     return (
       <div className="p-4">
         <h2>{quiz.title}</h2>
@@ -201,11 +273,13 @@ export default function TakeQuiz() {
         </div>
       </div>
     );
+
   return (
     <div className="p-4">
       <h2>{quiz.title}</h2>
       {quiz.description && <p>{quiz.description}</p>}
       <hr />
+
       {submitted && (
         <div className="alert alert-info mb-4">
           <strong>
@@ -213,6 +287,7 @@ export default function TakeQuiz() {
           </strong>
         </div>
       )}
+
       {quiz.oneQuestionAtATime && !submitted ? (
         <div>
           {renderQuestion(currentQuestion)}
