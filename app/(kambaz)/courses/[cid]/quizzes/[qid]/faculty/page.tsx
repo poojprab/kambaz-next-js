@@ -132,6 +132,19 @@ export default function QuizFacultyDetails() {
           </tr>
         </tbody>
       </table>
+      {quiz.groups && quiz.groups.length > 0 && (
+        <div className="mt-4">
+          <h5>Question Groups</h5>
+          {quiz.groups.map((group) => (
+            <div key={group._id} className="border rounded p-3 mb-2">
+              <strong>{group.name}</strong>
+              <div className="text-muted small mt-1">
+                {group.questionIds.length} question(s) assigned
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

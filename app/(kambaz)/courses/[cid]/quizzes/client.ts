@@ -50,6 +50,15 @@ export interface Quiz {
   oneQuestionAtATime: boolean;
   webcamRequired: boolean;
   lockQuestionsAfterAnswering: boolean;
+  groups: QuestionGroup[];
+}
+
+export interface QuestionGroup {
+  _id: string;
+  name: string;
+  pickCount: number;
+  pointsPerQuestion: number;
+  questionIds: string[];
 }
 
 export const findQuizzesForCourse = async (

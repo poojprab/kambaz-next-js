@@ -8,12 +8,10 @@ interface Choice {
   text: string;
   isCorrect: boolean;
 }
-
 interface Blank {
   _id: string;
-  correctAnswers: string[]; // multiple accepted answers per blank
+  correctAnswers: string[];
 }
-
 interface Question {
   _id: string;
   title: string;
@@ -23,10 +21,16 @@ interface Question {
   choices: Choice[];
   correctAnswer: string;
   possibleAnswers: string[];
-  blanks: Blank[]; // NEW: structured blanks for fill_in_blank
+  blanks: Blank[];
+}
+interface QuestionGroup {
+  _id: string;
+  name: string;
+  pickCount: number;
+  pointsPerQuestion: number;
+  questionIds: string[];
 }
 
-// ─── Shared header (title, type dropdown, pts) ───────────────────────────────
 function QuestionHeader({
   q,
   onChange,
@@ -67,7 +71,6 @@ function QuestionHeader({
   );
 }
 
-// ─── Unified Question Editor ──────────────────────────────────────────────────
 function QuestionEditor({
   question,
   onSave,
@@ -79,40 +82,32 @@ function QuestionEditor({
 }) {
   const [q, setQ] = useState<Question>(question);
 
-  // ── Multiple Choice helpers ──────────────────────────────────────────────
   const addChoice = () =>
     setQ({
       ...q,
       choices: [...q.choices, { _id: uuidv4(), text: "", isCorrect: false }],
     });
-
   const removeChoice = (id: string) =>
     setQ({ ...q, choices: q.choices.filter((c) => c._id !== id) });
-
   const setCorrect = (id: string) =>
     setQ({
       ...q,
       choices: q.choices.map((c) => ({ ...c, isCorrect: c._id === id })),
     });
-
   const updateChoiceText = (id: string, text: string) =>
     setQ({
       ...q,
       choices: q.choices.map((c) => (c._id === id ? { ...c, text } : c)),
     });
 
-  // ── Fill in the Blank helpers ────────────────────────────────────────────
-  const blanks: Blank[] = q.blanks ?? [];
-
+  const blanks = q.blanks ?? [];
   const addBlank = () =>
     setQ({
       ...q,
       blanks: [...blanks, { _id: uuidv4(), correctAnswers: [""] }],
     });
-
   const removeBlank = (id: string) =>
     setQ({ ...q, blanks: blanks.filter((b) => b._id !== id) });
-
   const addAnswerToBlank = (blankId: string) =>
     setQ({
       ...q,
@@ -122,7 +117,6 @@ function QuestionEditor({
           : b,
       ),
     });
-
   const removeAnswerFromBlank = (blankId: string, answerIndex: number) =>
     setQ({
       ...q,
@@ -137,7 +131,6 @@ function QuestionEditor({
           : b,
       ),
     });
-
   const updateBlankAnswer = (
     blankId: string,
     answerIndex: number,
@@ -159,9 +152,7 @@ function QuestionEditor({
 
   return (
     <div className="border p-3 mb-3">
-      {/* Shared header — type change re-renders body automatically */}
       <QuestionHeader q={q} onChange={setQ} />
-
       <textarea
         className="form-control mb-3"
         rows={3}
@@ -170,7 +161,6 @@ function QuestionEditor({
         onChange={(e) => setQ({ ...q, question: e.target.value })}
       />
 
-      {/* ── Multiple Choice body ────────────────────────────────────────── */}
       {q.type === "multiple_choice" && (
         <div>
           <strong className="d-block mb-2">Answers:</strong>
@@ -209,7 +199,6 @@ function QuestionEditor({
         </div>
       )}
 
-      {/* ── True/False body ─────────────────────────────────────────────── */}
       {q.type === "true_false" && (
         <div>
           <strong className="d-block mb-2">Correct Answer:</strong>
@@ -229,7 +218,6 @@ function QuestionEditor({
         </div>
       )}
 
-      {/* ── Fill in the Blank body ──────────────────────────────────────── */}
       {q.type === "fill_in_blank" && (
         <div>
           <strong className="d-block mb-2">Blanks:</strong>
@@ -291,7 +279,6 @@ function QuestionEditor({
         </div>
       )}
 
-      {/* ── Actions ─────────────────────────────────────────────────────── */}
       <div className="d-flex gap-2">
         <button className="btn btn-secondary" onClick={onCancel}>
           Cancel
@@ -304,7 +291,6 @@ function QuestionEditor({
   );
 }
 
-// ─── Main QuizQuestionsEditor ─────────────────────────────────────────────────
 export default function QuizQuestionsEditor({
   quiz,
   setQuiz,
@@ -313,8 +299,15 @@ export default function QuizQuestionsEditor({
   setQuiz: (quiz: Quiz) => void;
 }) {
   const [editingId, setEditingId] = useState<string | null>(null);
-
+  const [searchTerm, setSearchTerm] = useState("");
+  const groups = (quiz.groups ?? []) as QuestionGroup[];
   const questions = (quiz.questions ?? []) as Question[];
+
+  const filteredQuestions = questions.filter(
+    (q) =>
+      q.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      q.question.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
 
   const addQuestion = () => {
     const newQuestion: Question = {
@@ -330,6 +323,29 @@ export default function QuizQuestionsEditor({
     };
     setQuiz({ ...quiz, questions: [...questions, newQuestion] });
     setEditingId(newQuestion._id);
+  };
+
+  const addGroup = () => {
+    const newGroup: QuestionGroup = {
+      _id: uuidv4(),
+      name: "New Question Group",
+      pickCount: 1,
+      pointsPerQuestion: 1,
+      questionIds: [],
+    };
+    setQuiz({ ...quiz, groups: [...groups, newGroup] });
+  };
+
+  // ✅ FIX: update just the changed group, leave others untouched
+  const updateGroup = (updated: QuestionGroup) => {
+    setQuiz({
+      ...quiz,
+      groups: groups.map((g) => (g._id === updated._id ? updated : g)),
+    });
+  };
+
+  const deleteGroup = (id: string) => {
+    setQuiz({ ...quiz, groups: groups.filter((g) => g._id !== id) });
   };
 
   const saveQuestion = (saved: Question) => {
@@ -348,19 +364,119 @@ export default function QuizQuestionsEditor({
 
   return (
     <div>
-      <div className="d-flex justify-content-end mb-3">
+      <div className="mb-3">
+        <input
+          className="form-control"
+          placeholder="Find a question..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+
+      <div className="d-flex justify-content-end gap-2 mb-3">
+        <button className="btn btn-outline-secondary" onClick={addGroup}>
+          + New Question Group
+        </button>
         <button className="btn btn-outline-secondary" onClick={addQuestion}>
           + New Question
         </button>
       </div>
 
-      {questions.length === 0 && (
+      {/* Question Groups */}
+      {groups.map((group) => (
+        <div key={group._id} className="border rounded mb-4 bg-light">
+          <div className="p-3 d-flex justify-content-between align-items-center border-bottom">
+            <div className="d-flex align-items-center gap-3 flex-wrap">
+              <strong>Question Group</strong>
+              <input
+                className="form-control form-control-sm w-auto"
+                value={group.name}
+                onChange={(e) =>
+                  updateGroup({ ...group, name: e.target.value })
+                }
+                placeholder="Group name"
+              />
+              <span className="text-muted small">Pick</span>
+              <input
+                type="number"
+                className="form-control form-control-sm"
+                style={{ width: "70px" }}
+                value={group.pickCount}
+                min={1}
+                onChange={(e) =>
+                  updateGroup({
+                    ...group,
+                    pickCount: parseInt(e.target.value) || 1,
+                  })
+                }
+              />
+              <span className="text-muted small">questions</span>
+            </div>
+            <button
+              className="btn btn-sm btn-outline-danger"
+              onClick={() => deleteGroup(group._id)}
+            >
+              Delete Group
+            </button>
+          </div>
+
+          {/* ✅ FIX: question checkboxes are inside their own questions.map(),
+               so q is always properly scoped to each question */}
+          <div className="p-3">
+            <p className="text-muted small mb-2">
+              Select questions to include in this group:
+            </p>
+            {questions.length === 0 && (
+              <p className="text-muted small">No questions available yet.</p>
+            )}
+            {questions.map((q) => {
+              const isChecked = group.questionIds.includes(q._id);
+              const atLimit =
+                !isChecked && group.questionIds.length >= group.pickCount;
+              return (
+                <div
+                  key={q._id}
+                  className="d-flex align-items-center gap-2 mb-2"
+                >
+                  <input
+                    type="checkbox"
+                    checked={isChecked}
+                    disabled={atLimit}
+                    onChange={() => {
+                      const updatedIds = isChecked
+                        ? group.questionIds.filter((id) => id !== q._id)
+                        : [...group.questionIds, q._id];
+                      updateGroup({ ...group, questionIds: updatedIds });
+                    }}
+                  />
+                  <span>
+                    {q.title} — {q.type.replace(/_/g, " ")} — {q.points} pts
+                  </span>
+                  {atLimit && (
+                    <span className="text-muted small ms-2">
+                      (group full — increase Pick count to add more)
+                    </span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+
+      {/* Questions List */}
+      {filteredQuestions.length === 0 && searchTerm && (
+        <p className="text-muted text-center">
+          No questions match your search.
+        </p>
+      )}
+      {filteredQuestions.length === 0 && !searchTerm && (
         <p className="text-muted text-center">
           No questions yet. Click + New Question to add one.
         </p>
       )}
 
-      {questions.map((q) => (
+      {filteredQuestions.map((q) => (
         <div key={q._id}>
           {editingId === q._id ? (
             <QuestionEditor
