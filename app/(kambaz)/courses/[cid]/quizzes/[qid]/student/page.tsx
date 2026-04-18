@@ -1,4 +1,5 @@
 "use client";
+// this is the student view
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import * as client from "../../client";
