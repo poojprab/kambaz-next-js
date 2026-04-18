@@ -50,6 +50,20 @@ export default function QuizPreview() {
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState(0);
 
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearch = () => {
+    const match = questions.find(
+      (q) =>
+        q.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        q.question.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+    if (match) {
+      const idx = questions.findIndex((q) => q._id === match._id);
+      setCurrentIndex(idx);
+    }
+  };
+
   useEffect(() => {
     client.findQuizById(qid as string).then((data) => setQuiz(data as Quiz));
   }, [qid]);
@@ -385,6 +399,18 @@ export default function QuizPreview() {
       </div>
       <h2>{quiz.title}</h2>
       <hr />
+      <div className="mb-4 d-flex gap-2">
+        <input
+          className="form-control"
+          placeholder="Find a question..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+        />
+        <button className="btn btn-outline-secondary" onClick={handleSearch}>
+          Find
+        </button>
+      </div>
       {submitted ? (
         <div>
           <div className="alert alert-info mb-4">

@@ -42,6 +42,20 @@ export default function TakeQuiz() {
   const [attemptCount, setAttemptCount] = useState(0);
   const [attemptLocked, setAttemptLocked] = useState(false);
 
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearch = () => {
+    const match = questions.find(
+      (q) =>
+        q.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        q.question.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+    if (match) {
+      const idx = questions.findIndex((q) => q._id === match._id);
+      setCurrentIndex(idx);
+    }
+  };
+
   useEffect(() => {
     client.findQuizById(qid as string).then((q) => {
       setQuiz(q);
@@ -171,7 +185,7 @@ export default function TakeQuiz() {
           }}
         >
           <span style={{ color: "#adb5bd", fontSize: "16px" }}>⠿</span>
-          <strong style={{ fontSize: "15px" }}>Question</strong>
+          <strong style={{ fontSize: "15px" }}>{q.title}</strong>
           <span className="ms-auto text-muted" style={{ fontSize: "13px" }}>
             {q.points} pts
           </span>
@@ -421,6 +435,18 @@ export default function TakeQuiz() {
     <div className="p-4">
       <h2>{quiz.title}</h2>
       {quiz.description && <p>{quiz.description}</p>}
+      <div className="mb-4 d-flex gap-2">
+        <input
+          className="form-control"
+          placeholder="Find a question..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+        />
+        <button className="btn btn-outline-secondary" onClick={handleSearch}>
+          Find
+        </button>
+      </div>
       <hr />
       {submitted && (
         <div className="alert alert-info mb-4">
