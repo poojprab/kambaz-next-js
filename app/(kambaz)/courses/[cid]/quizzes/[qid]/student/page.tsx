@@ -31,7 +31,7 @@ interface Attempt {
   score: number;
 }
 
-export default function TakeQuiz() {
+export default function QuizStudentView() {
   const { qid } = useParams();
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [attempt, setAttempt] = useState<Attempt | null>(null);
@@ -64,7 +64,7 @@ export default function TakeQuiz() {
         .then((data) => {
           if (data) {
             setAttempt(data);
-            const count = (data as any).attemptCount ?? 1;
+            const count = data.attemptCount ?? 1;
             setAttemptCount(count);
             const restored: AllAnswers = {};
             Object.entries(data.answers).forEach(([qId, answer]) => {

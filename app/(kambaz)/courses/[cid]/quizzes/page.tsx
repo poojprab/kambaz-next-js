@@ -115,17 +115,6 @@ export default function Quizzes() {
   return (
     <div id="wd-quizzes" className="p-3">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <div className="input-group w-50">
-          <span className="input-group-text bg-white">
-            <FaSearch />
-          </span>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Search for Quiz"
-            id="wd-search-quiz"
-          />
-        </div>
         {isFaculty && (
           <button
             className="btn btn-danger"

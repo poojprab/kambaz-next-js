@@ -299,15 +299,8 @@ export default function QuizQuestionsEditor({
   setQuiz: (quiz: Quiz) => void;
 }) {
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
   const groups = (quiz.groups ?? []) as QuestionGroup[];
   const questions = (quiz.questions ?? []) as Question[];
-
-  const filteredQuestions = questions.filter(
-    (q) =>
-      q.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      q.question.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
 
   const addQuestion = () => {
     const newQuestion: Question = {
@@ -364,15 +357,6 @@ export default function QuizQuestionsEditor({
 
   return (
     <div>
-      <div className="mb-3">
-        <input
-          className="form-control"
-          placeholder="Find a question..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>
-
       <div className="d-flex justify-content-end gap-2 mb-3">
         <button className="btn btn-outline-secondary" onClick={addGroup}>
           + New Question Group
@@ -465,18 +449,13 @@ export default function QuizQuestionsEditor({
       ))}
 
       {/* Questions List */}
-      {filteredQuestions.length === 0 && searchTerm && (
-        <p className="text-muted text-center">
-          No questions match your search.
-        </p>
-      )}
-      {filteredQuestions.length === 0 && !searchTerm && (
+      {questions.length === 0 && (
         <p className="text-muted text-center">
           No questions yet. Click + New Question to add one.
         </p>
       )}
 
-      {filteredQuestions.map((q) => (
+      {questions.map((q) => (
         <div key={q._id}>
           {editingId === q._id ? (
             <QuestionEditor

@@ -115,6 +115,7 @@ export const findQuizAttempt = async (
 ): Promise<{
   answers: Record<string, string>;
   score: number;
+  attemptCount: number;
 } | null> => {
   const { data } = await axiosWithCredentials.get(
     `${QUIZZES_API}/${quizId}/attempts`,

@@ -5,10 +5,10 @@ import { useDispatch } from "react-redux";
 import { updateQuiz } from "../../../reducer";
 import * as client from "../../../client";
 import { Quiz } from "../../../client";
-import QuizDetailsEditor from "./DetailsEditor";
-import QuizQuestionsEditor from "./QuestionsEditor";
+import QuizDetailsEditor from "./QuizDetailsEditor";
+import QuizQuestionsEditor from "./QuizQuestionsEditor";
 
-export default function QuizEditor() {
+export default function QuizFacultyView() {
   const { cid, qid } = useParams();
   const router = useRouter();
   const dispatch = useDispatch();
