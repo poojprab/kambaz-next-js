@@ -39,30 +39,41 @@ export default function TakeQuiz() {
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [attemptCount, setAttemptCount] = useState(0);
+  const [attemptLocked, setAttemptLocked] = useState(false);
 
   useEffect(() => {
-    client.findQuizById(qid as string).then(setQuiz);
-    client
-      .findQuizAttempt(qid as string)
-      .then((data) => {
-        if (data) {
-          setAttempt(data);
-          const restored: AllAnswers = {};
-          Object.entries(data.answers).forEach(([qId, answer]) => {
-            try {
-              const parsed = JSON.parse(answer as string);
-              restored[qId] =
-                typeof parsed === "object" ? parsed : (answer as string);
-            } catch {
-              restored[qId] = answer as string;
+    client.findQuizById(qid as string).then((q) => {
+      setQuiz(q);
+      client
+        .findQuizAttempt(qid as string)
+        .then((data) => {
+          if (data) {
+            setAttempt(data);
+            const count = (data as any).attemptCount ?? 1;
+            setAttemptCount(count);
+            const restored: AllAnswers = {};
+            Object.entries(data.answers).forEach(([qId, answer]) => {
+              try {
+                const parsed = JSON.parse(answer as string);
+                restored[qId] =
+                  typeof parsed === "object" ? parsed : (answer as string);
+              } catch {
+                restored[qId] = answer as string;
+              }
+            });
+            setAnswers(restored);
+            setScore(data.score);
+            setSubmitted(true);
+            // check if locked out
+            const maxAttempts = q.multipleAttempts ? q.howManyAttempts : 1;
+            if (count >= maxAttempts) {
+              setAttemptLocked(true);
             }
-          });
-          setAnswers(restored);
-          setScore(data.score);
-          setSubmitted(true);
-        }
-      })
-      .catch(() => setAttempt(null));
+          }
+        })
+        .catch(() => setAttempt(null));
+    });
   }, [qid]);
 
   if (!quiz) return <div>Loading...</div>;
@@ -120,6 +131,15 @@ export default function TakeQuiz() {
     const finalScore = calculateScore();
     setScore(finalScore);
     setSubmitted(true);
+
+    const newCount = attemptCount + 1;
+    setAttemptCount(newCount);
+
+    const maxAttempts = quiz.multipleAttempts ? quiz.howManyAttempts : 1;
+    if (newCount >= maxAttempts) {
+      setAttemptLocked(true);
+    }
+
     const flatAnswers: Record<string, string> = {};
     Object.entries(answers).forEach(([qId, answer]) => {
       flatAnswers[qId] =
@@ -407,6 +427,27 @@ export default function TakeQuiz() {
           <strong>
             Your Score: {score} / {quiz.points}
           </strong>
+          <div className="mt-2 small text-muted">
+            Attempt {attemptCount} of{" "}
+            {quiz.multipleAttempts ? quiz.howManyAttempts : 1}
+          </div>
+          {!attemptLocked && quiz.multipleAttempts && (
+            <button
+              className="btn btn-outline-primary btn-sm mt-2"
+              onClick={() => {
+                setAnswers({});
+                setSubmitted(false);
+                setScore(0);
+              }}
+            >
+              Retake Quiz
+            </button>
+          )}
+          {attemptLocked && (
+            <div className="text-danger mt-2 small">
+              You have used all your attempts for this quiz.
+            </div>
+          )}
         </div>
       )}
       {quiz.oneQuestionAtATime && !submitted ? (
