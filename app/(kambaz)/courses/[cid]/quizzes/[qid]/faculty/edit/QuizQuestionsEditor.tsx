@@ -4,6 +4,7 @@ import { Quiz } from "../../../client";
 import { v4 as uuidv4 } from "uuid";
 import { Question, QuestionGroup } from "../../../client";
 
+// This is the header component, used for editing question title, type, and points. It is used inside the QuestionEditor component.
 function QuestionHeader({
   q,
   onChange,
@@ -44,6 +45,7 @@ function QuestionHeader({
   );
 }
 
+// This component is for editing a single question. It is used inside the QuizQuestionsEditor component when editing a question from the list of questions.
 function QuestionEditor({
   question,
   onSave,
@@ -53,8 +55,11 @@ function QuestionEditor({
   onSave: (q: Question) => void;
   onCancel: () => void;
 }) {
+  // Question for editing a specific question
   const [q, setQ] = useState<Question>(question);
 
+  // MULTIPLE CHOICE QUESTIONS
+  // Functions for adding and removing choices (setting the correct choice, etc.)
   const addChoice = () =>
     setQ({
       ...q,
@@ -73,6 +78,8 @@ function QuestionEditor({
       choices: q.choices.map((c) => (c._id === id ? { ...c, text } : c)),
     });
 
+  // FILL IN THE BLANK QUESTIONS
+  // Functions for adding and removing blanks, adding and removing accepted answers for each blank, etc.
   const blanks = q.blanks ?? [];
   const addBlank = () =>
     setQ({
@@ -134,6 +141,7 @@ function QuestionEditor({
         onChange={(e) => setQ({ ...q, question: e.target.value })}
       />
 
+      {/* RENDER MULTIPLE CHOICE QUESTIONS */}
       {q.type === "multiple_choice" && (
         <div>
           <strong className="d-block mb-2">Answers:</strong>
@@ -172,6 +180,7 @@ function QuestionEditor({
         </div>
       )}
 
+      {/* RENDER TRUE/FALSE QUESTIONS */}
       {q.type === "true_false" && (
         <div>
           <strong className="d-block mb-2">Correct Answer:</strong>
@@ -191,6 +200,7 @@ function QuestionEditor({
         </div>
       )}
 
+      {/* RENDER FILL IN THE BLANK QUESTIONS */}
       {q.type === "fill_in_blank" && (
         <div>
           <strong className="d-block mb-2">Blanks:</strong>
@@ -264,6 +274,7 @@ function QuestionEditor({
   );
 }
 
+// Edits a specific question group + add questions to the group.
 export default function QuizQuestionsEditor({
   quiz,
   setQuiz,
@@ -275,6 +286,7 @@ export default function QuizQuestionsEditor({
   const groups = (quiz.groups ?? []) as QuestionGroup[];
   const questions = (quiz.questions ?? []) as Question[];
 
+  // Adds singular question to the quiz (not in any group)
   const addQuestion = () => {
     const newQuestion: Question = {
       _id: uuidv4(),
@@ -291,18 +303,17 @@ export default function QuizQuestionsEditor({
     setEditingId(newQuestion._id);
   };
 
+  // These functions are for creating groups and editing the questions added to those groups.
   const addGroup = () => {
     const newGroup: QuestionGroup = {
       _id: uuidv4(),
       name: "New Question Group",
       pickCount: 1,
-      pointsPerQuestion: 1,
       questionIds: [],
     };
     setQuiz({ ...quiz, groups: [...groups, newGroup] });
   };
 
-  // ✅ FIX: update just the changed group, leave others untouched
   const updateGroup = (updated: QuestionGroup) => {
     setQuiz({
       ...quiz,
@@ -376,9 +387,6 @@ export default function QuizQuestionsEditor({
               Delete Group
             </button>
           </div>
-
-          {/* ✅ FIX: question checkboxes are inside their own questions.map(),
-               so q is always properly scoped to each question */}
           <div className="p-3">
             <p className="text-muted small mb-2">
               Select questions to include in this group:

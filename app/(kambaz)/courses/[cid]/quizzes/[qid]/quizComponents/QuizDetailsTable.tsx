@@ -1,6 +1,8 @@
 "use client";
 import { Quiz } from "../../client";
 
+// This component is for displaying quiz details in a table format. Pulls info from current quiz object.
+// This page is used for both faculty and students.
 export default function QuizDetailsTable({
   quiz,
   actions,

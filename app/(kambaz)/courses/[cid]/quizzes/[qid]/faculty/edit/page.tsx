@@ -8,6 +8,8 @@ import { Quiz } from "../../../client";
 import QuizDetailsEditor from "./QuizDetailsEditor";
 import QuizQuestionsEditor from "./QuizQuestionsEditor";
 
+// This page is for editing quiz details and questions. It has two tabs, for details and for questions.
+// The save button takes you to the details page, the save and publish takes you to the list of all quizzes.
 export default function QuizFacultyView() {
   const { cid, qid } = useParams();
   const router = useRouter();
@@ -17,10 +19,12 @@ export default function QuizFacultyView() {
     "details",
   );
 
+  // Load quiz details on mount
   useEffect(() => {
     client.findQuizById(qid as string).then(setQuiz);
   }, [qid]);
 
+  // Saves the quiz to the DB, does not publish, redirects to the quiz details page
   const handleSave = async () => {
     if (!quiz) return;
     const updated = await client.updateQuiz(quiz);
@@ -28,6 +32,7 @@ export default function QuizFacultyView() {
     router.push(`/courses/${cid}/quizzes/${qid}/faculty`);
   };
 
+  // Saves the quiz to the DB, publishes, redirects to the list of quizzes page
   const handleSaveAndPublish = async () => {
     if (!quiz) return;
     const updated = await client.updateQuiz({ ...quiz, published: true });
@@ -35,6 +40,7 @@ export default function QuizFacultyView() {
     router.push(`/courses/${cid}/quizzes`);
   };
 
+  // Loading screen while quiz is being fetched
   if (!quiz) return <div>Loading...</div>;
 
   return (

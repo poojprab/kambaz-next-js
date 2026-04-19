@@ -3,7 +3,8 @@ import { Quiz, Question, QuestionGroup } from "../../client";
 
 type AllAnswers = Record<string, string | Record<string, string>>;
 
-interface QuizTakerProps {
+// Because this page is used by both faculty and student, the props are passed in so we know what actions to show after submission.
+interface QuizViewProps {
   quiz: Quiz;
   answers: AllAnswers;
   submitted: boolean;
@@ -19,7 +20,9 @@ interface QuizTakerProps {
   afterSubmitContent?: React.ReactNode;
 }
 
-export default function QuizTaker({
+// This component is for displaying the quiz questions and answers in a single quiz attempt.
+// This component is used in both the student and faculty pages (student for taking the quiz and faculty for previewing the quiz).
+export default function QuizView({
   quiz,
   answers,
   submitted,
@@ -33,7 +36,7 @@ export default function QuizTaker({
   onSearch,
   isCorrect,
   afterSubmitContent,
-}: QuizTakerProps) {
+}: QuizViewProps) {
   const questions = (quiz.questions ?? []) as Question[];
   const groups = (quiz.groups ?? []) as QuestionGroup[];
   const currentQuestion = questions[currentIndex];

@@ -6,6 +6,7 @@ import { Quiz } from "../../client";
 import { FaBan, FaCheckCircle } from "react-icons/fa";
 import QuizDetailsTable from "../quizComponents/QuizDetailsTable";
 
+// This page is for faculty to view quiz details and see buttons to edit, preview, and publish/unpublish the quiz.
 export default function QuizFacultyDetails() {
   const { cid, qid } = useParams();
   const router = useRouter();
@@ -25,6 +26,7 @@ export default function QuizFacultyDetails() {
     setQuiz(updated);
   };
 
+  // Calls component QuizDetailsTable and adds buttons to edit, preview, and publish/unpublish the quiz.
   return (
     <QuizDetailsTable
       quiz={quiz}

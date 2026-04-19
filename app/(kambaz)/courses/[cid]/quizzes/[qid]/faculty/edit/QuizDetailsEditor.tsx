@@ -1,6 +1,8 @@
 "use client";
 import { Quiz } from "../../../client";
 
+// This component is for editing quiz details (title, description, type, etc.)
+// Contains many form fields for each quiz property and then calls setQuiz on change (state in parent component)
 export default function QuizDetailsEditor({
   quiz,
   setQuiz,

@@ -3,10 +3,11 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import * as client from "../../../client";
 import { Quiz, Question } from "../../../client";
-import QuizTaker from "../../quizComponents/Quiz";
+import QuizView from "../../quizComponents/QuizView";
 
 type AllAnswers = Record<string, string | Record<string, string>>;
 
+// Quiz Preview for the faculty to take a "mock quiz"
 export default function QuizPreview() {
   const { cid, qid } = useParams();
   const router = useRouter();
@@ -45,10 +46,12 @@ export default function QuizPreview() {
 
   const questions = quiz.questions as Question[];
 
+  // Handle true/false and multipl choice answers
   const handleSimpleAnswer = (questionId: string, answer: string) => {
     setAnswers((prev) => ({ ...prev, [questionId]: answer }));
   };
 
+  // handle fill in the blank answers that are stored as an object with keys as blank ids and values as the answer for that blank
   const handleBlankAnswer = (
     questionId: string,
     blankId: string,
@@ -61,6 +64,7 @@ export default function QuizPreview() {
     }));
   };
 
+  // grades quiz based on the answers in state, sets score and submitted to true to show correct/incorrect and score
   const isCorrect = (q: Question): boolean => {
     if (q.type === "multiple_choice") {
       const correct = q.choices.find((c) => c.isCorrect);
@@ -85,6 +89,7 @@ export default function QuizPreview() {
     return false;
   };
 
+  // calls set isCorrect to grade quiz and display score
   const handleSubmit = () => {
     setScore(
       questions.reduce(
@@ -95,6 +100,7 @@ export default function QuizPreview() {
     setSubmitted(true);
   };
 
+  // Handles searching for a question by title or question text, sets current index to the first match
   const handleSearch = () => {
     const match = questions.find(
       (q) =>
@@ -113,7 +119,7 @@ export default function QuizPreview() {
       </div>
       <h2>{quiz.title}</h2>
       <hr />
-      <QuizTaker
+      <QuizView
         quiz={quiz}
         answers={answers}
         submitted={submitted}

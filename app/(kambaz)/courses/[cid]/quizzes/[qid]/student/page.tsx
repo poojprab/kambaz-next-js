@@ -4,10 +4,11 @@ import { useParams } from "next/navigation";
 import * as client from "../../client";
 import { Quiz, Question } from "../../client";
 import QuizDetailsTable from "../quizComponents/QuizDetailsTable";
-import QuizTaker from "../quizComponents/Quiz";
+import QuizView from "../quizComponents/QuizView";
 
 type AllAnswers = Record<string, string | Record<string, string>>;
 
+// This page is for students to take the quiz. It uses the component QuizView.
 export default function QuizStudentView() {
   const { qid } = useParams();
   const [quiz, setQuiz] = useState<Quiz | null>(null);
@@ -20,6 +21,7 @@ export default function QuizStudentView() {
   const [started, setStarted] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
+  // On mount, load quiz details and any existing attempt for this quiz to restore answers and show attempt count
   useEffect(() => {
     client.findQuizById(qid as string).then((q) => {
       setQuiz(q);
@@ -58,11 +60,13 @@ export default function QuizStudentView() {
   const availableUntil = new Date(quiz.availableUntil);
   const isAvailable = now >= availableFrom && now <= availableUntil;
 
+  // Handle true/false and multipl choice answers
   const handleSimpleAnswer = (questionId: string, answer: string) => {
     if (submitted) return;
     setAnswers((prev) => ({ ...prev, [questionId]: answer }));
   };
 
+  // handle fill in the blank answers that are stored as an object with keys as blank ids and values as the answer for that blank
   const handleBlankAnswer = (
     questionId: string,
     blankId: string,
@@ -76,6 +80,7 @@ export default function QuizStudentView() {
     }));
   };
 
+  // grades quiz based on the answers in state, sets score and submitted to true to show correct/incorrect and score
   const isCorrect = (q: Question): boolean => {
     if (q.type === "multiple_choice") {
       const correct = q.choices.find((c) => c.isCorrect);
@@ -100,6 +105,7 @@ export default function QuizStudentView() {
     return false;
   };
 
+  // calls set isCorrect to grade quiz and display score
   const handleSubmit = async () => {
     const finalScore = questions.reduce(
       (total, q) => (isCorrect(q) ? total + q.points : total),
@@ -119,6 +125,7 @@ export default function QuizStudentView() {
     await client.saveQuizAttempt(qid as string, flatAnswers, finalScore);
   };
 
+  // Handles searching for a question by title or question text, sets current index to the first match
   const handleSearch = () => {
     const match = questions.find(
       (q) =>
@@ -157,7 +164,7 @@ export default function QuizStudentView() {
       <h2>{quiz.title}</h2>
       {quiz.description && <p>{quiz.description}</p>}
       <hr />
-      <QuizTaker
+      <QuizView
         quiz={quiz}
         answers={answers}
         submitted={submitted}

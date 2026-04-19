@@ -3,18 +3,14 @@ import { useParams, useRouter } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteQuiz, togglePublish, setQuizzes, addQuiz } from "./reducer";
 import { RootState } from "../../../store";
-import {
-  FaPlus,
-  FaEllipsisV,
-  FaCheckCircle,
-  FaBan,
-} from "react-icons/fa";
+import { FaPlus, FaEllipsisV, FaCheckCircle, FaBan } from "react-icons/fa";
 import { FaTrash, FaPencil } from "react-icons/fa6";
 import { BsGripVertical } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import * as client from "./client";
 import { Quiz } from "./client";
 
+// This page is the main quiz list page for a course. It shows all quizzes for the course, with different options for faculty and students.
 export default function Quizzes() {
   const { cid } = useParams();
   const router = useRouter();
@@ -28,12 +24,15 @@ export default function Quizzes() {
 
   const [attempts, setAttempts] = useState<Record<string, number>>({});
 
+  // Load quizzes for the course on mount and whenever the course ID changes, used to display the list of quizzes on the page
   useEffect(() => {
     client
       .findQuizzesForCourse(cid as string)
       .then((data) => dispatch(setQuizzes(data)));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cid]);
 
+  // Filter quizzes to only those for this course, and if student, only show published quizzes. Sort by availability date. Used to display the list of quizzes on the page.
   const courseQuizzes = quizzes
     .filter((q: Quiz) => q.course === cid)
     .filter((q: Quiz) => isFaculty || q.published)
@@ -43,6 +42,7 @@ export default function Quizzes() {
         new Date(b.availableFrom).getTime(),
     );
 
+  // On mount, if student, load quiz attempts for each quiz to show attempt count and score on the quiz list page
   useEffect(() => {
     if (!isFaculty) {
       courseQuizzes.forEach((quiz: Quiz) => {
@@ -58,6 +58,7 @@ export default function Quizzes() {
     }
   }, [courseQuizzes, isFaculty]);
 
+  // Handle quiz deletion, used when faculty clicks "Delete" on a quiz in the quiz list. (Includes popup)
   const handleDelete = async (quizId: string) => {
     if (window.confirm("Are you sure you want to delete this quiz?")) {
       await client.deleteQuiz(quizId);
@@ -66,6 +67,7 @@ export default function Quizzes() {
     setOpenMenuId(null);
   };
 
+  // Handle publish toggle (everytime faculty presses publish button, the quiz publishes/unpublishes and the text on the button changes)
   const handleTogglePublish = async (quiz: Quiz) => {
     const updated = await client.updateQuiz({
       ...quiz,
@@ -75,6 +77,7 @@ export default function Quizzes() {
     return updated;
   };
 
+  // Get availability status based on the dates included in the quiz details
   const getAvailabilityStatus = (quiz: Quiz) => {
     const now = new Date();
     const from = new Date(quiz.availableFrom);
@@ -84,6 +87,7 @@ export default function Quizzes() {
     return `Not available until ${from.toLocaleDateString()}`;
   };
 
+  // Handle adding a new quiz when faculty clicks add quiz button
   const handleAddQuiz = async () => {
     const newQuiz = await client.createQuiz(cid as string, {
       title: "New Quiz",
