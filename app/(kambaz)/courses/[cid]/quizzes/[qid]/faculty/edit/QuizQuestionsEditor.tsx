@@ -2,34 +2,7 @@
 import { useState } from "react";
 import { Quiz } from "../../../client";
 import { v4 as uuidv4 } from "uuid";
-
-interface Choice {
-  _id: string;
-  text: string;
-  isCorrect: boolean;
-}
-interface Blank {
-  _id: string;
-  correctAnswers: string[];
-}
-interface Question {
-  _id: string;
-  title: string;
-  type: "multiple_choice" | "true_false" | "fill_in_blank";
-  points: number;
-  question: string;
-  choices: Choice[];
-  correctAnswer: string;
-  possibleAnswers: string[];
-  blanks: Blank[];
-}
-interface QuestionGroup {
-  _id: string;
-  name: string;
-  pickCount: number;
-  pointsPerQuestion: number;
-  questionIds: string[];
-}
+import { Question, QuestionGroup } from "../../../client";
 
 function QuestionHeader({
   q,

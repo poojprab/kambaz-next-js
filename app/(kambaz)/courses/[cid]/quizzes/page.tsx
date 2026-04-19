@@ -5,7 +5,6 @@ import { deleteQuiz, togglePublish, setQuizzes, addQuiz } from "./reducer";
 import { RootState } from "../../../store";
 import {
   FaPlus,
-  FaSearch,
   FaEllipsisV,
   FaCheckCircle,
   FaBan,
