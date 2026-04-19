@@ -35,11 +35,11 @@ export default function QuizFacultyDetails() {
           <button className="btn btn-secondary" onClick={handlePublishToggle}>
             {quiz.published ? (
               <>
-                <FaCheckCircle className="text-success me-1" /> Published
+                <FaBan className="text-secondary me-1" /> Unpublish
               </>
             ) : (
               <>
-                <FaBan className="text-secondary me-1" /> Unpublished
+                <FaCheckCircle className="text-success me-1" /> Publish
               </>
             )}
           </button>
