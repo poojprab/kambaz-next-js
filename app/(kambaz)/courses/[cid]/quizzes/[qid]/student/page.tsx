@@ -1,5 +1,4 @@
 "use client";
-// this is the student view
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import * as client from "../../client";
@@ -41,20 +40,8 @@ export default function QuizStudentView() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [attemptCount, setAttemptCount] = useState(0);
   const [attemptLocked, setAttemptLocked] = useState(false);
-
+  const [started, setStarted] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-
-  const handleSearch = () => {
-    const match = questions.find(
-      (q) =>
-        q.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        q.question.toLowerCase().includes(searchTerm.toLowerCase()),
-    );
-    if (match) {
-      const idx = questions.findIndex((q) => q._id === match._id);
-      setCurrentIndex(idx);
-    }
-  };
 
   useEffect(() => {
     client.findQuizById(qid as string).then((q) => {
@@ -79,11 +66,8 @@ export default function QuizStudentView() {
             setAnswers(restored);
             setScore(data.score);
             setSubmitted(true);
-            // check if locked out
             const maxAttempts = q.multipleAttempts ? q.howManyAttempts : 1;
-            if (count >= maxAttempts) {
-              setAttemptLocked(true);
-            }
+            if (count >= maxAttempts) setAttemptLocked(true);
           }
         })
         .catch(() => setAttempt(null));
@@ -95,6 +79,23 @@ export default function QuizStudentView() {
   const questions = (quiz.questions ?? []) as Question[];
   const groups = (quiz.groups ?? []) as QuestionGroup[];
   const currentQuestion = questions[currentIndex];
+
+  const now = new Date();
+  const availableFrom = new Date(quiz.availableFrom);
+  const availableUntil = new Date(quiz.availableUntil);
+  const isAvailable = now >= availableFrom && now <= availableUntil;
+
+  const handleSearch = () => {
+    const match = questions.find(
+      (q) =>
+        q.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        q.question.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+    if (match) {
+      const idx = questions.findIndex((q) => q._id === match._id);
+      setCurrentIndex(idx);
+    }
+  };
 
   const handleSimpleAnswer = (questionId: string, answer: string) => {
     if (submitted) return;
@@ -145,15 +146,10 @@ export default function QuizStudentView() {
     const finalScore = calculateScore();
     setScore(finalScore);
     setSubmitted(true);
-
     const newCount = attemptCount + 1;
     setAttemptCount(newCount);
-
     const maxAttempts = quiz.multipleAttempts ? quiz.howManyAttempts : 1;
-    if (newCount >= maxAttempts) {
-      setAttemptLocked(true);
-    }
-
+    if (newCount >= maxAttempts) setAttemptLocked(true);
     const flatAnswers: Record<string, string> = {};
     Object.entries(answers).forEach(([qId, answer]) => {
       flatAnswers[qId] =
@@ -389,9 +385,7 @@ export default function QuizStudentView() {
           {questions.map((q, i) => (
             <button
               key={q._id}
-              className={`btn btn-sm ${
-                i === currentIndex ? "btn-primary" : "btn-outline-secondary"
-              }`}
+              className={`btn btn-sm ${i === currentIndex ? "btn-primary" : "btn-outline-secondary"}`}
               onClick={() => setCurrentIndex(i)}
             >
               {i + 1}
@@ -402,35 +396,112 @@ export default function QuizStudentView() {
     );
   };
 
-  const now = new Date();
-  const availableFrom = new Date(quiz.availableFrom);
-  const availableUntil = new Date(quiz.availableUntil);
-  const isAvailable = now >= availableFrom && now <= availableUntil;
+  // ── Details screen (shown before starting) ──────────────────────────────
+  if (!started && !submitted) {
+    return (
+      <div className="p-4" style={{ maxWidth: "600px" }}>
+        <h2>{quiz.title}</h2>
+        {quiz.description && <p className="text-muted">{quiz.description}</p>}
+        <hr />
+        <table className="table table-borderless">
+          <tbody>
+            <tr>
+              <td className="fw-bold text-end">Quiz Type</td>
+              <td>{quiz.quizType}</td>
+            </tr>
+            <tr>
+              <td className="fw-bold text-end">Points</td>
+              <td>{quiz.points}</td>
+            </tr>
+            <tr>
+              <td className="fw-bold text-end">Questions</td>
+              <td>{questions.length}</td>
+            </tr>
+            <tr>
+              <td className="fw-bold text-end">Time Limit</td>
+              <td>
+                {quiz.timeLimit > 0 ? `${quiz.timeLimit} Minutes` : "No Limit"}
+              </td>
+            </tr>
+            <tr>
+              <td className="fw-bold text-end">Allowed Attempts</td>
+              <td>{quiz.multipleAttempts ? quiz.howManyAttempts : 1}</td>
+            </tr>
+            <tr>
+              <td className="fw-bold text-end">Due</td>
+              <td>
+                {quiz.dueDate ? new Date(quiz.dueDate).toLocaleString() : "N/A"}
+              </td>
+            </tr>
+            <tr>
+              <td className="fw-bold text-end">Available</td>
+              <td>
+                {quiz.availableFrom
+                  ? new Date(quiz.availableFrom).toLocaleString()
+                  : "N/A"}
+                {" — "}
+                {quiz.availableUntil
+                  ? new Date(quiz.availableUntil).toLocaleString()
+                  : "N/A"}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <hr />
+        {!isAvailable ? (
+          <div className="alert alert-warning">
+            {now < availableFrom
+              ? `This quiz is not available until ${availableFrom.toLocaleDateString()}`
+              : "This quiz is closed."}
+          </div>
+        ) : (
+          <button className="btn btn-danger" onClick={() => setStarted(true)}>
+            Start Quiz
+          </button>
+        )}
+      </div>
+    );
+  }
 
-  if (!isAvailable)
+  // ── Already submitted — show results ────────────────────────────────────
+  if (submitted) {
     return (
       <div className="p-4">
         <h2>{quiz.title}</h2>
         <hr />
-        <div className="alert alert-warning">
-          {now < availableFrom
-            ? `This quiz is not available until ${availableFrom.toLocaleDateString()}`
-            : "This quiz is closed."}
+        <div className="alert alert-info mb-4">
+          <strong>
+            Your Score: {score} / {quiz.points}
+          </strong>
+          <div className="mt-2 small text-muted">
+            Attempt {attemptCount} of{" "}
+            {quiz.multipleAttempts ? quiz.howManyAttempts : 1}
+          </div>
+          {!attemptLocked && quiz.multipleAttempts && (
+            <button
+              className="btn btn-outline-primary btn-sm mt-2"
+              onClick={() => {
+                setAnswers({});
+                setSubmitted(false);
+                setStarted(true);
+                setScore(0);
+              }}
+            >
+              Retake Quiz
+            </button>
+          )}
+          {attemptLocked && (
+            <div className="text-danger mt-2 small">
+              You have used all your attempts for this quiz.
+            </div>
+          )}
         </div>
+        {renderGroupedQuestions()}
       </div>
     );
+  }
 
-  if (questions.length === 0)
-    return (
-      <div className="p-4">
-        <h2>{quiz.title}</h2>
-        <hr />
-        <div className="alert alert-warning">
-          This quiz has no questions yet.
-        </div>
-      </div>
-    );
-
+  // ── Taking the quiz ──────────────────────────────────────────────────────
   return (
     <div className="p-4">
       <h2>{quiz.title}</h2>
@@ -448,45 +519,15 @@ export default function QuizStudentView() {
         </button>
       </div>
       <hr />
-      {submitted && (
-        <div className="alert alert-info mb-4">
-          <strong>
-            Your Score: {score} / {quiz.points}
-          </strong>
-          <div className="mt-2 small text-muted">
-            Attempt {attemptCount} of{" "}
-            {quiz.multipleAttempts ? quiz.howManyAttempts : 1}
-          </div>
-          {!attemptLocked && quiz.multipleAttempts && (
-            <button
-              className="btn btn-outline-primary btn-sm mt-2"
-              onClick={() => {
-                setAnswers({});
-                setSubmitted(false);
-                setScore(0);
-              }}
-            >
-              Retake Quiz
-            </button>
-          )}
-          {attemptLocked && (
-            <div className="text-danger mt-2 small">
-              You have used all your attempts for this quiz.
-            </div>
-          )}
-        </div>
-      )}
-      {quiz.oneQuestionAtATime && !submitted ? (
+      {quiz.oneQuestionAtATime ? (
         renderOneAtATime()
-      ) : !submitted ? (
+      ) : (
         <div>
           {renderGroupedQuestions()}
           <button className="btn btn-danger mt-3" onClick={handleSubmit}>
             Submit Quiz
           </button>
         </div>
-      ) : (
-        <div>{renderGroupedQuestions()}</div>
       )}
     </div>
   );

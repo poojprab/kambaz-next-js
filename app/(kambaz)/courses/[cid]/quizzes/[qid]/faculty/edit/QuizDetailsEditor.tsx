@@ -176,6 +176,21 @@ export default function QuizDetailsEditor({
       </div>
 
       <div className="mb-3">
+        <label className="form-label fw-bold">Show Correct Answers</label>
+        <select
+          className="form-select"
+          value={quiz.showCorrectAnswers}
+          onChange={(e) =>
+            setQuiz({ ...quiz, showCorrectAnswers: e.target.value })
+          }
+        >
+          <option value="immediately">Immediately</option>
+          <option value="after_due_date">After Due Date</option>
+          <option value="never">Never</option>
+        </select>
+      </div>
+
+      <div className="mb-3">
         <label className="form-label fw-bold">Access Code</label>
         <input
           className="form-control"
