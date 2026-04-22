@@ -65,7 +65,7 @@ export default function QuizFacultyView() {
       </ul>
 
       {activeTab === "details" && (
-        <QuizDetailsEditor quiz={quiz} setQuiz={setQuiz} />
+        <QuizDetailsEditor quiz={quiz} onChange={setQuiz} />
       )}
       {activeTab === "questions" && (
         <QuizQuestionsEditor quiz={quiz} setQuiz={setQuiz} />

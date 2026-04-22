@@ -22,7 +22,7 @@ export default function Quizzes() {
   const isFaculty = currentUser?.role === "FACULTY";
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
-  const [attempts, setAttempts] = useState<Record<string, number>>({});
+  const [attemptScore, setAttemptScore] = useState<Record<string, number>>({});
 
   // Load quizzes for the course on mount and whenever the course ID changes, used to display the list of quizzes on the page
   useEffect(() => {
@@ -50,7 +50,10 @@ export default function Quizzes() {
           .findQuizAttempt(quiz._id)
           .then((attempt) => {
             if (attempt) {
-              setAttempts((prev) => ({ ...prev, [quiz._id]: attempt.score }));
+              setAttemptScore((prev) => ({
+                ...prev,
+                [quiz._id]: attempt.score,
+              }));
             }
           })
           .catch(() => {});
@@ -194,11 +197,11 @@ export default function Quizzes() {
                         : "N/A"}{" "}
                       | {quiz.points} pts | {quiz.questions?.length || 0}{" "}
                       Questions
-                      {!isFaculty && attempts[quiz._id] !== undefined && (
+                      {!isFaculty && attemptScore[quiz._id] !== undefined && (
                         <span
-                          className={`ms-2 ${attempts[quiz._id] / quiz.points >= 0.7 ? "text-success" : "text-danger"}`}
+                          className={`ms-2 ${attemptScore[quiz._id] / quiz.points >= 0.7 ? "text-success" : "text-danger"}`}
                         >
-                          | Score: {attempts[quiz._id]} / {quiz.points}
+                          | Score: {attemptScore[quiz._id]} / {quiz.points}
                         </span>
                       )}
                     </div>

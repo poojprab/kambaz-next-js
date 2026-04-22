@@ -192,9 +192,6 @@ export default function QuizView({
       >
         <span style={{ color: "#adb5bd", fontSize: "16px" }}>⠿</span>
         <strong>{group.name}</strong>
-        <span className="text-muted" style={{ fontSize: "14px" }}>
-          Pick {group.pickCount} question{group.pickCount !== 1 ? "s" : ""}
-        </span>
       </div>
       <div style={{ padding: "16px 24px", background: "#f8f9fa" }}>
         {children}

@@ -5,10 +5,10 @@ import { Quiz } from "../../../client";
 // Contains many form fields for each quiz property and then calls setQuiz on change (state in parent component)
 export default function QuizDetailsEditor({
   quiz,
-  setQuiz,
+  onChange: setQuiz,
 }: {
   quiz: Quiz;
-  setQuiz: (quiz: Quiz) => void;
+  onChange: (quiz: Quiz) => void;
 }) {
   return (
     <div>
