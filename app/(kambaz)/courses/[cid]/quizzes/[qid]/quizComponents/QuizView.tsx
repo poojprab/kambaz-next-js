@@ -3,7 +3,6 @@ import { Quiz, Question, QuestionGroup } from "../../client";
 
 type AllAnswers = Record<string, string | Record<string, string>>;
 
-// Because this page is used by both faculty and student, the props are passed in so we know what actions to show after submission.
 interface QuizViewProps {
   quiz: Quiz;
   answers: AllAnswers;
@@ -20,8 +19,6 @@ interface QuizViewProps {
   afterSubmitContent?: React.ReactNode;
 }
 
-// This component is for displaying the quiz questions and answers in a single quiz attempt.
-// This component is used in both the student and faculty pages (student for taking the quiz and faculty for previewing the quiz).
 export default function QuizView({
   quiz,
   answers,
@@ -41,9 +38,11 @@ export default function QuizView({
   const groups = (quiz.groups ?? []) as QuestionGroup[];
   const currentQuestion = questions[currentIndex];
 
+  // Render each individual question based on type, showing correct/incorrect if submitted
   const renderQuestion = (q: Question, nested = false) => {
     const blanks = q.blanks ?? [];
     const blankAnswers = (answers[q._id] as Record<string, string>) ?? {};
+
     return (
       <div
         className={nested ? "mb-3" : "mb-4"}
@@ -69,15 +68,21 @@ export default function QuizView({
             {q.points} pts
           </span>
         </div>
+
         <div style={{ padding: "20px 24px", background: "#fff" }}>
           <p style={{ marginBottom: "16px" }}>{q.question}</p>
+          {/* Show correct/incorrect and correct answers if submitted */}
           {submitted && (
             <div
-              className={`alert ${isCorrect(q) ? "alert-success" : "alert-danger"} py-1 mb-3`}
+              className={`alert ${
+                isCorrect(q) ? "alert-success" : "alert-danger"
+              } py-1 mb-3`}
             >
               {isCorrect(q) ? "✓ Correct" : "✗ Incorrect"}
             </div>
           )}
+
+          {/* MULTIPLE CHOICE */}
           {q.type === "multiple_choice" &&
             q.choices.map((choice) => (
               <div
@@ -100,6 +105,8 @@ export default function QuizView({
                 )}
               </div>
             ))}
+
+          {/* TRUE OR FALSE */}
           {q.type === "true_false" &&
             ["true", "false"].map((val) => (
               <div key={val} className="d-flex align-items-center gap-2 mb-2">
@@ -117,6 +124,8 @@ export default function QuizView({
                 )}
               </div>
             ))}
+
+          {/* FILL IN THE BLANK */}
           {q.type === "fill_in_blank" && (
             <div>
               {blanks.length > 0 ? (
@@ -127,7 +136,6 @@ export default function QuizView({
                     </label>
                     <input
                       className="form-control"
-                      placeholder={`Answer for blank ${i + 1}`}
                       value={blankAnswers[blank._id] ?? ""}
                       onChange={(e) =>
                         !submitted &&
@@ -146,7 +154,6 @@ export default function QuizView({
                 <div>
                   <input
                     className="form-control"
-                    placeholder="Your answer"
                     value={(answers[q._id] as string) || ""}
                     onChange={(e) =>
                       !submitted && onSimpleAnswer(q._id, e.target.value)
@@ -167,12 +174,12 @@ export default function QuizView({
     );
   };
 
+  // Renders a question group container with the given child content, used to wrap questions that are in a group with the group name as the header
   const renderGroupContainer = (
     group: QuestionGroup,
-    children: React.ReactNode,
+    child: React.ReactNode,
   ) => (
     <div
-      key={group._id}
       className="mb-4"
       style={{
         border: "1px solid #dee2e6",
@@ -185,69 +192,30 @@ export default function QuizView({
           background: "#f8f9fa",
           borderBottom: "1px solid #dee2e6",
           padding: "10px 16px",
-          display: "flex",
-          alignItems: "center",
-          gap: "10px",
         }}
       >
-        <span style={{ color: "#adb5bd", fontSize: "16px" }}>⠿</span>
         <strong>{group.name}</strong>
       </div>
-      <div style={{ padding: "16px 24px", background: "#f8f9fa" }}>
-        {children}
-      </div>
+      <div style={{ padding: "16px 24px", background: "#f8f9fa" }}>{child}</div>
     </div>
   );
 
-  const renderGroupedQuestions = () => {
-    const groupedQuestionIds = new Set(groups.flatMap((g) => g.questionIds));
-    const standaloneQuestions = questions.filter(
-      (q) => !groupedQuestionIds.has(q._id),
-    );
-    return (
-      <div>
-        {groups.map((group) => {
-          const groupQuestions = questions.filter((q) =>
-            group.questionIds.includes(q._id),
-          );
-          return renderGroupContainer(
-            group,
-            groupQuestions.length === 0 ? (
-              <p className="text-muted small mb-0">
-                No questions assigned to this group yet.
-              </p>
-            ) : (
-              groupQuestions.map((q) => (
-                <div key={q._id}>{renderQuestion(q, true)}</div>
-              ))
-            ),
-          );
-        })}
-        {standaloneQuestions.map((q) => (
-          <div key={q._id}>{renderQuestion(q, false)}</div>
-        ))}
-      </div>
-    );
-  };
-
   const renderOneAtATime = () => {
+    if (!currentQuestion) return null;
+
     const currentGroup = groups.find((g) =>
       g.questionIds.includes(currentQuestion._id),
     );
+
+    const questionContent = renderQuestion(currentQuestion, !!currentGroup);
+
     return (
       <div>
-        {currentGroup ? (
-          renderGroupContainer(
-            currentGroup,
-            <div key={currentQuestion._id}>
-              {renderQuestion(currentQuestion, true)}
-            </div>,
-          )
-        ) : (
-          <div key={currentQuestion._id}>
-            {renderQuestion(currentQuestion, false)}
-          </div>
-        )}
+        {currentGroup
+          ? renderGroupContainer(currentGroup, questionContent)
+          : questionContent}
+
+        {/* Navigation */}
         <div className="d-flex justify-content-between mt-3">
           <button
             className="btn btn-secondary"
@@ -256,6 +224,7 @@ export default function QuizView({
           >
             ← Previous
           </button>
+
           {currentIndex < questions.length - 1 ? (
             <button
               className="btn btn-primary"
@@ -263,12 +232,14 @@ export default function QuizView({
             >
               Next →
             </button>
-          ) : (
+          ) : !submitted ? (
             <button className="btn btn-danger" onClick={onSubmit}>
               Submit Quiz
             </button>
-          )}
+          ) : null}
         </div>
+
+        {/* Question Jump */}
         <div className="mt-3">
           <strong>Questions:</strong>
           <div className="d-flex gap-2 mt-2 flex-wrap">
@@ -291,6 +262,7 @@ export default function QuizView({
 
   return (
     <div>
+      {/* Search */}
       <div className="mb-4 d-flex gap-2">
         <input
           className="form-control"
@@ -303,21 +275,11 @@ export default function QuizView({
           Find
         </button>
       </div>
-      {submitted ? (
-        <div>
-          {afterSubmitContent}
-          {renderGroupedQuestions()}
-        </div>
-      ) : quiz.oneQuestionAtATime ? (
-        renderOneAtATime()
-      ) : (
-        <div>
-          {renderGroupedQuestions()}
-          <button className="btn btn-danger mt-3" onClick={onSubmit}>
-            Submit Quiz
-          </button>
-        </div>
-      )}
+
+      {/* Checks if we've submitted and renders the after submit content from the parent (student or faculty) */}
+      {submitted && afterSubmitContent}
+      {/* Then renders all the questions one at a time with the navigation */}
+      {renderOneAtATime()}
     </div>
   );
 }
